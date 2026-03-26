@@ -1,0 +1,186 @@
+---
+import { getTestimonials } from '../lib/queries';
+
+const sanityTestimonials = await getTestimonials();
+
+const testimonials = sanityTestimonials?.length ? sanityTestimonials.map((t: any) => ({
+    name: t.name,
+    date: t.date,
+    stats: t.stats,
+    status: t.status,
+    text: t.text,
+    stars: t.stars ?? 5,
+    color: t.avatarColor ?? '#4285F4'
+})) : [
+    { name: "Nada Semmar", date: "Il y a 6 mois", stats: "2 avis", text: "Une dentiste exceptionnelle, avec compétence, bienveillance et bonne écoute. À recommander sans hésitation !", stars: 5, color: "#a67c6c" },
+    { name: "Abderrahmane El Mabrouki", date: "Il y a 6 mois", stats: "1 avis", text: "Dr.CHORFI is skilled, friendly, and makes every patient feel comfortable. Highly recommend", stars: 5, color: "#C2185B" },
+    { name: "Hiba El Arabi", date: "Il y a 8 mois", stats: "1 avis", text: "Je recommande vivement cette clinique dentaire !", stars: 5, color: "#E65100" },
+    { name: "Khadija Chahboune", date: "Il y a 6 mois", stats: "1 avis", text: "Très bon dentiste ! Accueil chaleureux, explications claires et travail soigné.", stars: 5, color: "#BF360C" }
+];
+---
+
+<section class="py-24 bg-[#F8F9FA] overflow-hidden" id="testimonials-section">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        
+        {/* Header with Google Rating look */}
+        <div class="flex flex-col lg:flex-row items-center justify-between mb-16 gap-8">
+            <div class="text-left">
+                <div class="flex items-center gap-2 text-gray-500 text-sm font-medium mb-4">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                    Témoignages et avis
+                </div>
+                <h2 class="text-4xl lg:text-6xl font-medium font-bricolage text-[#141C18]">
+                    Ce que disent nos patients
+                </h2>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center min-w-[200px]">
+                <div class="flex items-center gap-2 mb-2">
+                    <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.webp" alt="Google" class="h-6" />
+                    <span class="text-gray-400 font-medium">Rating</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl font-bold text-[#141C18]">5.0</span>
+                    <div class="flex gap-0.5 text-[#FBBC05]">
+                        {[...Array(5)].map(() => (
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {/* Carousel / Track */}
+        <div class="relative overflow-hidden -mx-6 lg:-mx-8">
+            <div class="flex gap-6 testimonials-track px-6 lg:px-8 py-4">
+                {/* Double the cards for seamless loop */}
+                {[...testimonials, ...testimonials].map((t) => (
+                    <div class="min-w-[320px] lg:min-w-[400px] max-w-[400px] bg-white p-8 rounded-2xl shadow-sm border border-gray-100 testimonial-card flex flex-col h-full hover:shadow-xl transition-shadow duration-500">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-4">
+                                {/* Google Style Initial Avatar */}
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center text-white text-xl font-medium shrink-0" style={`background-color: ${t.color}`}>
+                                    {t.name[0]}
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-[#141C18] text-base">{t.name}</span>
+                                    <span class="text-[0.7rem] text-gray-400 font-medium whitespace-nowrap">
+                                        {t.status && <span class="text-orange-600 mr-1">{t.status} •</span>}
+                                        {t.stats}
+                                    </span>
+                                </div>
+                            </div>
+                            {/* Google G Icon */}
+                            <div class="w-6 h-6 flex items-center justify-center opacity-40">
+                                <svg viewBox="0 0 24 24" class="w-full h-full fill-current text-gray-400">
+                                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        {/* Rating Stars Small & Date */}
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="flex gap-0.5 text-[#FBBC05]">
+                                {[...Array(t.stars)].map(() => (
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                ))}
+                            </div>
+                            <span class="text-[0.8rem] text-gray-400 font-medium lowercase">
+                                {t.date}
+                            </span>
+                        </div>
+
+                        {/* Compacted Text with Read More */}
+                        <div class="relative flex-grow">
+                            <p class="text-[#141C18]/80 leading-relaxed text-[0.92rem] line-clamp-3 overflow-hidden transition-all duration-300 review-text">
+                                {t.text}
+                            </p>
+                            {t.text.length > 120 && (
+                                <button class="text-[#1a73e8] text-[0.85rem] font-medium mt-1 hover:underline read-more-btn">
+                                    Lire la suite
+                                </button>
+                            )}
+                        </div>
+                        
+                        <div class="mt-4 flex items-center gap-2 text-[#34A853] text-[0.7rem] font-semibold uppercase tracking-wider opacity-80">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            Avis certifié
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .testimonials-track {
+        display: flex;
+        width: max-content;
+        will-change: transform;
+    }
+    
+    .testimonial-card {
+        min-height: 250px;
+        justify-content: space-between;
+    }
+
+    /* Custom Line Clamp if Tailwind isn't available/configured for it */
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
+
+<script>
+    import { gsap } from 'gsap';
+
+    // Infinite horizontal scroll animation
+    const track = document.querySelector('.testimonials-track');
+    const cards = document.querySelectorAll('.testimonial-card');
+    
+    if (track) {
+        // Calculate the width of one set of cards
+        const totalWidth = track.scrollWidth / 2;
+        
+        const animation = gsap.to(track, {
+            x: -totalWidth,
+            duration: 90, // Adjust speed here (higher = slower)
+            ease: "none",
+            repeat: -1,
+            onRepeat: () => {
+                // Ensure it's seamless
+                gsap.set(track, { x: 0 });
+            }
+        });
+
+        // Pause on hover
+        track.addEventListener('mouseenter', () => animation.pause());
+        track.addEventListener('mouseleave', () => animation.play());
+    }
+
+    // Initial entrance animation for the section
+    gsap.from('#testimonials-section h2, #testimonials-section .bg-white', {
+        y: 30,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: 'power3.out',
+        scrollTrigger: {
+            trigger: '#testimonials-section',
+            start: 'top 80%',
+        }
+    });
+
+</script>

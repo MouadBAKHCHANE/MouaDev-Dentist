@@ -1,0 +1,171 @@
+---
+import { urlFor } from '../lib/sanity';
+import { getHomePage } from '../lib/queries';
+
+const homePage = await getHomePage();
+
+const floatingImages = homePage?.ctaFloatingImages?.length ? homePage.ctaFloatingImages.map((f: any) => ({
+    src: f.image ? urlFor(f.image).width(400).format('webp').url() : '',
+    class: f.class,
+    speed: f.speed
+})) : [
+    { src: "/moroccan_patient_1_1772212564642.webp", class: "top-[10%] left-[15%] w-24 h-24 lg:w-32 lg:h-32", speed: 50 },
+    { src: "/moroccan_patient_2_1772212578695.webp", class: "top-[8%] right-[20%] w-20 h-20 lg:w-28 lg:h-28", speed: -40 },
+    { src: "/moroccan_patient_3_1772212594944.webp", class: "bottom-[20%] left-[10%] w-28 h-28 lg:w-36 lg:h-36", speed: 30 },
+    { src: "/moroccan_patient_4_1772212608273.webp", class: "top-[45%] left-[5%] w-16 h-16 lg:w-24 lg:h-24", speed: -60 },
+    { src: "/moroccan_patient_5_1772212623083.webp", class: "bottom-[42%] right-[10%] w-24 h-24 lg:w-32 lg:h-32", speed: 45 },
+    { src: "/moroccan_patient_6_1772212637380.webp", class: "bottom-[15%] right-[12%] w-20 h-20 lg:w-28 lg:h-28", speed: -35 }
+];
+
+const ctaHeadline = homePage?.ctaHeadline ?? "Obtenez le sourire que vous méritez <br /> dès aujourd'hui !";
+---
+
+<section class="relative bg-white py-32 lg:py-48 overflow-hidden min-h-[600px] flex items-center justify-center" id="appointment-cta">
+    {/* Floating Images Container */}
+    <div class="absolute inset-0 z-0 pointer-events-none">
+        {floatingImages.map((img, index) => (
+            <div 
+                class={`absolute ${img.class} floating-img rounded-3xl overflow-hidden shadow-lg`}
+                data-speed={img.speed}
+            >
+                <img src={img.src} alt="Floating Smile" class="w-full h-full object-cover" />
+            </div>
+        ))}
+    </div>
+
+    {/* Content */}
+    <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        <h2 class="text-3xl lg:text-4xl font-bricolage text-[#141C18] leading-[1.1] tracking-tight mb-12">
+            <Fragment set:html={ctaHeadline} />
+        </h2>
+        
+        <div class="flex justify-center">
+            <a href={homePage?.ctaCTALink ?? "/contact"} class="bg-[#d9f96b] text-[#141C18] px-10 py-5 rounded-full font-medium text-lg flex items-center gap-3 hover:bg-[#cbef5a] transition-all group scale-110">
+                {homePage?.ctaCTAText ?? "Prendre Rendez-vous"}
+                <div class="bg-black text-white w-8 h-8 rounded-full flex items-center justify-center transition-transform group-hover:rotate-45">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19L19 5M19 5v10M19 5H9" />
+                    </svg>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Dispersion animation for floating images - One-way entry for stability
+    const images = document.querySelectorAll('.floating-img');
+    const container = document.querySelector('#appointment-cta');
+
+    if (container) {
+        images.forEach((img) => {
+            const el = img as HTMLElement;
+            
+            // Initial positioning: offset from center
+            // We calculate the offset once and then animate to 0 (the CSS position)
+            const rect = el.getBoundingClientRect();
+            const parentRect = container.getBoundingClientRect();
+            const centerX = parentRect.width / 2;
+            const centerY = parentRect.height / 2;
+            const itemX = rect.left - parentRect.left + rect.width / 2;
+            const itemY = rect.top - parentRect.top + rect.height / 2;
+            
+            const offsetX = centerX - itemX;
+            const offsetY = centerY - itemY;
+
+            // Set initial state
+            gsap.set(el, {
+                x: offsetX,
+                y: offsetY,
+                scale: 0.1,
+                opacity: 0
+            });
+
+            // Entry animation: trigger once when section is visible
+            gsap.to(el, {
+                scrollTrigger: {
+                    trigger: '#appointment-cta',
+                    start: 'top 80%', // Starts earlier to be visible
+                    toggleActions: "play none none none", // Only play once
+                },
+                x: 0,
+                y: 0,
+                scale: 1,
+                opacity: 1,
+                duration: 1.5,
+                ease: "expo.out",
+                delay: Math.random() * 0.4 // Slight stagger for natural feel
+            });
+        });
+    }
+
+    // Headline reveal animation
+    gsap.from('#appointment-cta h2', {
+        scrollTrigger: {
+            trigger: '#appointment-cta',
+            start: 'top 85%',
+        },
+        y: 30,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out'
+    });
+</script>
+
+<style>
+    /* Mobile/Tablet: push floating images away from center content */
+    @media (max-width: 1024px) {
+        :global(#appointment-cta .floating-img) {
+            opacity: 0.4 !important;
+        }
+
+        /* Push top-right image higher */
+        :global(#appointment-cta > div:first-child > div:nth-child(2)) {
+            top: 2% !important;
+            right: 5% !important;
+        }
+
+        /* Push right images further right */
+        :global(#appointment-cta > div:first-child > div:nth-child(5)) {
+            right: 2% !important;
+        }
+        :global(#appointment-cta > div:first-child > div:nth-child(6)) {
+            right: 2% !important;
+        }
+
+        /* Push left images further left */
+        :global(#appointment-cta > div:first-child > div:nth-child(1)) {
+            left: 3% !important;
+        }
+        :global(#appointment-cta > div:first-child > div:nth-child(3)) {
+            left: 2% !important;
+        }
+        :global(#appointment-cta > div:first-child > div:nth-child(4)) {
+            left: 0% !important;
+        }
+    }
+
+    @media (max-width: 640px) {
+        :global(#appointment-cta .floating-img) {
+            opacity: 0.3 !important;
+            max-width: 5rem;
+            max-height: 5rem;
+        }
+
+        :global(#appointment-cta) {
+            min-height: 450px;
+            padding-top: 2.5rem;
+            padding-bottom: 2.5rem;
+        }
+
+        :global(#appointment-cta > .relative.z-10) {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+    }
+</style>

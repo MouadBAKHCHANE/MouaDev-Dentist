@@ -1,0 +1,160 @@
+---
+interface BreadcrumbItem {
+	name: string;
+	href: string;
+}
+
+interface Props {
+	title: string;
+	description?: string;
+	ogImage?: string;
+	noIndex?: boolean;
+	canonical?: string;
+	jsonLd?: Record<string, any> | Record<string, any>[];
+	breadcrumbs?: BreadcrumbItem[];
+}
+
+const { title, description, ogImage, noIndex, canonical, jsonLd, breadcrumbs } = Astro.props;
+
+const siteUrl = 'https://www.cabinetdentairechorfi.com';
+const defaultDescription = 'Cabinet Dentaire Chorfi à Salé - Implants dentaires, blanchiment, orthodontie, soins esthétiques. Dr Zainab Chorfi, votre dentiste de confiance.';
+const defaultOgImage = `${siteUrl}/logo.webp`;
+
+const metaDescription = description || defaultDescription;
+const metaOgImage = ogImage || defaultOgImage;
+const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
+
+const localBusinessJsonLd = {
+	"@context": "https://schema.org",
+	"@type": "Dentist",
+	"name": "Cabinet Dentaire Chorfi",
+	"description": defaultDescription,
+	"url": siteUrl,
+	"logo": `${siteUrl}/logo.webp`,
+	"image": `${siteUrl}/logo.webp`,
+	"telephone": ["+212644801152", "+212538716787"],
+	"address": {
+		"@type": "PostalAddress",
+		"streetAddress": "Avenue Moulay Youssef n 19, 1er étage",
+		"addressLocality": "Tabriquet, Salé",
+		"addressCountry": "MA"
+	},
+	"geo": {
+		"@type": "GeoCoordinates",
+		"latitude": 34.0378219,
+		"longitude": -6.803389
+	},
+	"openingHoursSpecification": [
+		{ "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "09:00", "closes": "13:00" },
+		{ "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "15:00", "closes": "19:00" },
+		{ "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:00", "closes": "13:00" }
+	],
+	"priceRange": "$$",
+	"sameAs": [
+		"https://www.instagram.com/cabinet.dentaire.chorfi/",
+		"https://www.facebook.com/61576404963248/about/"
+	],
+	"medicalSpecialty": "Dentistry",
+	"aggregateRating": {
+		"@type": "AggregateRating",
+		"ratingValue": "5.0",
+		"reviewCount": "50",
+		"bestRating": "5"
+	}
+};
+
+const breadcrumbJsonLd = breadcrumbs?.length ? {
+	"@context": "https://schema.org",
+	"@type": "BreadcrumbList",
+	"itemListElement": [
+		{ "@type": "ListItem", "position": 1, "name": "Accueil", "item": siteUrl },
+		...breadcrumbs.map((b, i) => ({
+			"@type": "ListItem",
+			"position": i + 2,
+			"name": b.name,
+			"item": `${siteUrl}${b.href}`
+		}))
+	]
+} : null;
+
+const extraJsonLd = [
+	...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []),
+	...(breadcrumbJsonLd ? [breadcrumbJsonLd] : [])
+];
+
+const allJsonLd = [localBusinessJsonLd, ...extraJsonLd];
+
+import '../styles/global.css';
+import FloatingContact from '../components/FloatingContact.astro';
+---
+
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="google-site-verification" content="VW5tGvfrNRDS3vcsip9aPcjRF-XyJm6GO8NJlDZ1NKE" />
+		<meta name="description" content={metaDescription} />
+		<meta name="viewport" content="width=device-width" />
+		<!-- Favicons -->
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<meta name="theme-color" content="#141C18" />
+		<meta name="generator" content={Astro.generator} />
+		<link rel="canonical" href={canonicalUrl} />
+
+		{noIndex && <meta name="robots" content="noindex, nofollow" />}
+
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={metaDescription} />
+		<meta property="og:image" content={metaOgImage} />
+		<meta property="og:locale" content="fr_MA" />
+		<meta property="og:site_name" content="Cabinet Dentaire Chorfi" />
+
+		<!-- Twitter Card -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={metaDescription} />
+		<meta name="twitter:image" content={metaOgImage} />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+		<title>{title}</title>
+
+		{allJsonLd.map((ld) => (
+			<script type="application/ld+json" set:html={JSON.stringify(ld)} />
+		))}
+		<slot name="head" />
+	</head>
+	<body class="font-inter text-oralix-text-main antialiased bg-oralix-gray overflow-x-hidden selection:bg-oralix-brand selection:text-oralix-dark">
+		<slot />
+        <FloatingContact />
+
+        <script>
+            // Smooth scrolling setup using Lenis (Standard modern stack practice replacing old locomotive scroll)
+            import Lenis from 'lenis';
+            import gsap from 'gsap';
+            import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+            gsap.registerPlugin(ScrollTrigger);
+
+            const lenis = new Lenis({
+                autoRaf: true,
+                smoothTouch: false,
+            });
+
+            // Keep GSAP ScrollTrigger strictly in sync with Lenis
+            lenis.on('scroll', ScrollTrigger.update);
+
+            gsap.ticker.add((time) => {
+                lenis.raf(time * 1000);
+            });
+            gsap.ticker.lagSmoothing(0);
+        </script>
+	</body>
+</html>

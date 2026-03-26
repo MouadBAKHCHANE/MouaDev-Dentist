@@ -1,0 +1,217 @@
+---
+// src/components/ContactSection.astro
+import { getSiteSettings } from '../lib/queries';
+const settings = await getSiteSettings();
+const { noBackground = false } = Astro.props;
+---
+
+<section class={noBackground ? "relative w-full py-0" : "relative w-full flex items-center justify-start py-12 lg:py-16 overflow-hidden"} id="contact">
+    {/* Background Image with Overlay */}
+    {!noBackground && (
+        <div class="absolute inset-0 z-0">
+            <img 
+                src="https://cdn.prod.website-files.com/68a6ab81292d1af1b4de5a38/68a9994cf3d364a196abdfa9_Appointment.webp" 
+                alt="Appointment Background" 
+                class="w-full h-full object-cover"
+            />
+            <div class="absolute inset-0 bg-black/40"></div>
+        </div>
+    )}
+
+    <div class={noBackground ? "w-full relative z-10" : "max-w-7xl mx-auto px-6 lg:px-8 relative z-10 w-full"}>
+        <div class={noBackground ? "w-full bg-white rounded-[2rem] p-8 lg:p-10 shadow-xl contact-form-card" : "max-w-xl bg-white rounded-[2rem] p-8 lg:p-10 shadow-2xl contact-form-card"}>
+            <div class="mb-6">
+                <div class="flex items-center gap-2 text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#D1F26E]"></span>
+                    {settings?.formBadge ?? "Contactez-nous"}
+                </div>
+                <h2 class="text-3xl md:text-4xl font-medium font-bricolage text-[#141C18] leading-tight">
+                    {settings?.formTitle ?? "Prenez rendez-vous"}
+                </h2>
+            </div>
+
+            <form class="space-y-4" id="contact-form">
+                <div id="form-success" class="hidden bg-green-50 border border-green-200 text-green-800 rounded-2xl p-4 text-sm font-medium">
+                    {settings?.formSuccessMessage ?? "Votre demande a été envoyée avec succès ! Nous vous recontacterons rapidement."}
+                </div>
+                <div id="form-error" class="hidden bg-red-50 border border-red-200 text-red-800 rounded-2xl p-4 text-sm font-medium">
+                    {settings?.formErrorMessage ?? "Une erreur est survenue. Veuillez réessayer ou nous contacter par téléphone."}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-tight mb-1 content-px">{settings?.formLabelName ?? "Nom Complet"}*</label>
+                    <input
+                        type="text"
+                        name="name"
+                        required
+                        placeholder="Votre nom"
+                        class="w-full px-5 py-3 bg-[#F6F7F9] border-none rounded-full focus:ring-2 focus:ring-[#D1F26E] outline-none transition-all text-sm"
+                    />
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-tight mb-1 content-px">{settings?.formLabelPhone ?? "Téléphone"}*</label>
+                        <input
+                            type="tel"
+                            name="phone"
+                            required
+                            placeholder="06 12 34 56 78"
+                            class="w-full px-5 py-3 bg-[#F6F7F9] border-none rounded-full focus:ring-2 focus:ring-[#D1F26E] outline-none transition-all text-sm"
+                        />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-tight mb-1 content-px">{settings?.formLabelEmail ?? "E-mail"}</label>
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="votre@email.com"
+                            class="w-full px-5 py-3 bg-[#F6F7F9] border-none rounded-full focus:ring-2 focus:ring-[#D1F26E] outline-none transition-all text-sm"
+                        />
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-tight mb-1 content-px">{settings?.formLabelService ?? "Type de soin"}</label>
+                        <select name="service" class="w-full px-5 py-3 bg-[#F6F7F9] border-none rounded-full focus:ring-2 focus:ring-[#D1F26E] outline-none transition-all appearance-none cursor-pointer text-sm">
+                            <option value="">{settings?.formServicePlaceholder ?? "Choisir un soin"}</option>
+                            <option>Blanchiment des dents</option>
+                            <option>Traitement de canal</option>
+                            <option>Implants dentaires</option>
+                            <option>Consultation générale</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-tight mb-1 content-px">{settings?.formLabelDate ?? "Date souhaitée"}</label>
+                        <input
+                            type="text"
+                            name="date"
+                            id="datepicker"
+                            placeholder="Sélectionner une date"
+                            class="w-full px-5 py-3 bg-[#F6F7F9] border-none rounded-full focus:ring-2 focus:ring-[#D1F26E] outline-none transition-all cursor-pointer text-sm"
+                        />
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3 px-1 mt-2">
+                    <input type="checkbox" id="disclaimer" class="mt-1 w-4 h-4 rounded border-gray-300 text-[#D1F26E] focus:ring-[#D1F26E] cursor-pointer shrink-0" />
+                    <label for="disclaimer" class="text-[13px] text-gray-500 leading-tight cursor-pointer select-none">
+                        {settings?.formDisclaimerText ?? "J'autorise le cabinet à me recontacter pour confirmer mon rendez-vous*"}
+                    </label>
+                </div>
+
+                <button
+                    id="submit-btn"
+                    disabled
+                    data-submit-text={settings?.formSubmitText ?? "Confirmer ma demande de rendez-vous"}
+                    class="w-full bg-[#D1F26E] disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed text-[#141C18] font-bold py-3 sm:py-4 px-4 rounded-full hover:bg-[#c4e661] transition-all flex items-center justify-center gap-2 group mt-2 font-bricolage text-xs sm:text-sm md:text-base shadow-lg shadow-black/5"
+                >
+                    {settings?.formSubmitText ?? "Confirmer ma demande de rendez-vous"}
+                    <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Custom select arrow */
+    select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23141C18'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1.5rem center;
+        background-size: 1.25rem;
+    }
+</style>
+
+<script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    import flatpickr from "flatpickr";
+    import { French } from "flatpickr/dist/l10n/fr.js";
+    import "flatpickr/dist/flatpickr.css";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.from('.contact-form-card', {
+        scrollTrigger: {
+            trigger: '#contact',
+            start: 'top 70%',
+        },
+        y: 60,
+        opacity: 0,
+        duration: 1.2,
+        ease: 'power3.out'
+    });
+
+    // Initialize flatpickr in French
+    flatpickr("#datepicker", {
+        locale: French,
+        dateFormat: "d/m/Y",
+        minDate: "today",
+        disableMobile: "true" // Use custom calendar on mobile too for consistency
+    });
+
+    // Toggle submit button based on disclaimer checkbox
+    const disclaimer = document.getElementById('disclaimer') as HTMLInputElement;
+    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+
+    if (disclaimer && submitBtn) {
+        disclaimer.addEventListener('change', (e) => {
+            const isChecked = (e.target as HTMLInputElement).checked;
+            submitBtn.disabled = !isChecked;
+        });
+    }
+
+    // Form submission
+    const form = document.getElementById('contact-form') as HTMLFormElement;
+    const successMsg = document.getElementById('form-success');
+    const errorMsg = document.getElementById('form-error');
+
+    form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        successMsg?.classList.add('hidden');
+        errorMsg?.classList.add('hidden');
+
+        const formData = new FormData(form);
+        const data = {
+            name: formData.get('name'),
+            phone: formData.get('phone'),
+            email: formData.get('email'),
+            service: formData.get('service'),
+            date: formData.get('date'),
+        };
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Envoi en cours...';
+        }
+
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+
+            if (res.ok) {
+                successMsg?.classList.remove('hidden');
+                form.reset();
+                if (submitBtn) submitBtn.disabled = true;
+            } else {
+                errorMsg?.classList.remove('hidden');
+            }
+        } catch {
+            errorMsg?.classList.remove('hidden');
+        } finally {
+            if (submitBtn) {
+                const submitText = submitBtn.getAttribute('data-submit-text') || 'Confirmer ma demande de rendez-vous';
+                submitBtn.innerHTML = `${submitText} <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>`;
+                const cb = document.getElementById('disclaimer') as HTMLInputElement;
+                submitBtn.disabled = !cb?.checked;
+            }
+        }
+    });
+</script>

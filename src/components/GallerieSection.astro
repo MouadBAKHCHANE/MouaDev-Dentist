@@ -1,0 +1,335 @@
+---
+import { urlFor } from '../lib/sanity';
+import { getGalleryItems } from '../lib/queries';
+
+const sanityGallery = await getGalleryItems();
+
+const galleryItems = sanityGallery?.length ? sanityGallery.map((g: any) => ({
+    type: g.type,
+    src: g.type === 'video' ? g.videoUrl : (g.image ? urlFor(g.image).width(800).format('webp').url() : ''),
+    poster: g.videoPoster ? urlFor(g.videoPoster).width(800).format('webp').url() : undefined
+})) : [
+  { type: 'video', src: "/videos/Dr Zainab vd 1 st.MP4", poster: "/images/posters/video-1-poster.webp" },
+  { type: 'video', src: "/videos/Dr zainab vd 2 st.MP4", poster: "/images/posters/video-2-poster.webp" },
+  { type: 'image', src: "/images/le cabinet/clinic-6.jpg.jpeg.webp" },
+  { type: 'image', src: "/images/le cabinet/clinic-5.jpg.webp" },
+  { type: 'image', src: "/images/le cabinet/clinic-4.jpg.webp" },
+  { type: 'image', src: "/images/le cabinet/clinic-3.jpg.webp" },
+  { type: 'image', src: "/images/le cabinet/clinic-2.jpg.webp" },
+  { type: 'image', src: "/images/le cabinet/clinic-1.jpg.webp" }
+];
+---
+<section class="py-24 bg-white overflow-hidden" id="gallerie">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        
+        {/* Header matching other sections */}
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-8 gallerie-header">
+            <div>
+                <div class="inline-flex items-center gap-2 mb-4 text-gray-500 font-medium text-sm">
+                    <span class="w-1.5 h-1.5 rounded-full bg-oralix-brand"></span>
+                    Galerie
+                </div>
+                <h2 class="text-4xl lg:text-5xl font-medium text-[#141C18] leading-tight font-bricolage tracking-tight">
+                    Instagram
+                </h2>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <a href="https://www.instagram.com/cabinet.dentaire.chorfi/" target="_blank" class="flex items-center justify-center w-12 h-12 rounded-full bg-gray-50 border border-gray-100 hover:bg-gray-100 hover:scale-110 transition-all duration-300">
+                    <svg class="w-6 h-6 text-[#141C18]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        {/* Slider with Side Buttons */}
+        <div class="relative group/slider">
+            {/* Seamless Horizontal Slider */}
+            <div 
+                id="gallerie-slider" 
+                class="flex gap-4 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide cursor-grab active:cursor-grabbing select-none"
+                style="scrollbar-width: none; -ms-overflow-style: none;"
+            >
+                {galleryItems.map((item, idx) => (
+                    <div 
+                      class="flex-none w-[75vw] md:w-[280px] lg:w-[320px] aspect-[9/16] overflow-hidden snap-center gallerie-item group relative cursor-pointer rounded-2xl md:rounded-3xl shadow-xl border border-gray-100/50" 
+                      data-src={item.src}
+                      data-type={item.type}
+                    >
+                        {item.type === 'video' ? (
+                           <div class="relative w-full h-full">
+                               <video src={item.src} poster={item.poster} class="w-full h-full object-cover" muted playsinline loop title={`Vidéo de la galerie ${idx + 1}`}></video>
+                               {/* Instagram Video Icon */}
+                               <div class="absolute top-3 right-3 z-10 pointer-events-none">
+                                   <div class="bg-black/20 backdrop-blur-sm p-1.5 rounded-md border border-white/20">
+                                       <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                           <path d="M16 16c0 1.104-.896 2-2 2H4c-1.104 0-2-.896-2-2V8c0-1.104.896-2 2-2h10c1.104 0 2 .896 2 2v8zm2-10.42v8.83l4 2.39V3.19l-4 2.39z"/>
+                                       </svg>
+                                   </div>
+                               </div>
+                           </div>
+                        ) : (
+                           <img src={item.src} alt={`Image de la clinique ${idx + 1}`} class="w-full h-full object-cover" />
+                        )}
+                        
+                        {/* Hover Overlay */}
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                             <div class="flex items-center gap-2 text-white font-bold">
+                                 {item.type === 'video' ? (
+                                   <svg class="w-8 h-8 fill-current scale-110" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                 ) : (
+                                   <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                 )}
+                                 <span>Voir</span>
+                             </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Side Navigation Buttons */}
+            <button 
+                id="slider-prev" 
+                class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 backdrop-blur-md shadow-lg border border-gray-100 flex items-center justify-center text-gray-700 hover:bg-white hover:scale-110 transition-all duration-300 z-20 group disabled:opacity-0"
+                aria-label="Previous"
+            >
+                <svg class="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" /></svg>
+            </button>
+            <button 
+                id="slider-next" 
+                class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 backdrop-blur-md shadow-lg border border-gray-100 flex items-center justify-center text-gray-700 hover:bg-white hover:scale-110 transition-all duration-300 z-20 group disabled:opacity-0"
+                aria-label="Next"
+            >
+                <svg class="w-6 h-6 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" /></svg>
+            </button>
+
+            {/* Progress Bar */}
+            <div class="mt-6 h-1 w-full bg-gray-100 rounded-full overflow-hidden max-w-xs mx-auto">
+                <div id="slider-progress" class="h-full bg-oralix-brand w-0 transition-all duration-300 ease-out rounded-full"></div>
+            </div>
+        </div>
+    </div>
+
+    {/* Lightbox Modal */}
+    <div id="gallery-modal" class="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+        {/* Controls Overlay */}
+        <div class="absolute top-6 right-6 flex items-center gap-4 z-[110]">
+            <button id="zoom-out" class="text-white/70 hover:text-white transition-colors bg-white/10 p-2 rounded-full hidden md:block" title="Zoom Out" aria-label="Dézoomer">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" /></svg>
+            </button>
+            <button id="zoom-in" class="text-white/70 hover:text-white transition-colors bg-white/10 p-2 rounded-full hidden md:block" title="Zoom In" aria-label="Zoomer">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
+            </button>
+            <button id="close-modal" class="text-white/70 hover:text-white transition-colors bg-white/10 p-2 rounded-full" title="Close" aria-label="Fermer">
+                <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+        </div>
+
+        {/* Navigation Arrows */}
+        <button id="prev-img" class="absolute left-6 text-white/50 hover:text-white transition-all z-[110] p-4 bg-white/5 rounded-full hover:bg-white/10">
+            <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+        </button>
+        <button id="next-img" class="absolute right-6 text-white/50 hover:text-white transition-all z-[110] p-4 bg-white/5 rounded-full hover:bg-white/10">
+            <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+        </button>
+
+        {/* Image Container */}
+        <div id="modal-content" class="max-w-[85vw] max-h-[85vh] relative overflow-hidden flex items-center justify-center">
+            <img id="modal-img" src="" alt="Zoom" class="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl transition-transform duration-300 ease-out cursor-grab active:cursor-grabbing" />
+        </div>
+
+        {/* Counter */}
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50 font-medium tracking-widest text-sm" id="modal-counter">
+            0 / 0
+        </div>
+    </div>
+</section>
+
+<script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.from('.gallerie-header', {
+        scrollTrigger: {
+            trigger: '#gallerie',
+            start: 'top 85%',
+            once: true,
+        },
+        y: 40,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out'
+    });
+
+    // --- Slider Logic ---
+    const slider = document.getElementById('gallerie-slider');
+    const progressBar = document.getElementById('slider-progress');
+    const nextBtnSlider = document.getElementById('slider-next');
+    const prevBtnSlider = document.getElementById('slider-prev');
+
+    if (slider && progressBar) {
+        const updateProgress = () => {
+            const scrollPercent = (slider.scrollLeft / (slider.scrollWidth - slider.clientWidth)) * 100;
+            progressBar.style.width = `${scrollPercent}%`;
+            
+            // Toggle visibility of buttons at ends
+            if (prevBtnSlider) (prevBtnSlider as HTMLButtonElement).disabled = slider.scrollLeft <= 5;
+            if (nextBtnSlider) (nextBtnSlider as HTMLButtonElement).disabled = slider.scrollLeft >= (slider.scrollWidth - slider.clientWidth - 5);
+        };
+
+        slider.addEventListener('scroll', updateProgress);
+        window.addEventListener('resize', updateProgress);
+        setTimeout(updateProgress, 500); // Initial check
+
+        nextBtnSlider?.addEventListener('click', () => {
+            slider.scrollBy({ left: 350, behavior: 'smooth' });
+        });
+
+        prevBtnSlider?.addEventListener('click', () => {
+            slider.scrollBy({ left: -350, behavior: 'smooth' });
+        });
+
+        // Drag to scroll
+        let isDown = false;
+        let startX: number;
+        let scrollLeft: number;
+
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+        slider.addEventListener('mouseleave', () => isDown = false);
+        slider.addEventListener('mouseup', () => isDown = false);
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 2;
+            slider.scrollLeft = scrollLeft - walk;
+        });
+    }
+
+    // --- Lightbox Logic ---
+    const gallerieItems = document.querySelectorAll('.gallerie-item');
+    const modal = document.getElementById('gallery-modal');
+    const modalContent = document.getElementById('modal-content');
+    const closeModal = document.getElementById('close-modal');
+    const prevBtnMod = document.getElementById('prev-img');
+    const nextBtnMod = document.getElementById('next-img');
+    const zoomInBtn = document.getElementById('zoom-in');
+    const zoomOutBtn = document.getElementById('zoom-out');
+    const counterDisplay = document.getElementById('modal-counter');
+
+    let currentIndex = 0;
+    let currentScale = 1;
+
+    const itemsData = Array.from(gallerieItems).map(item => ({
+        src: (item as HTMLElement).dataset.src,
+        type: (item as HTMLElement).dataset.type
+    }));
+
+    const updateModalContent = (index: number) => {
+        if (!modalContent || !itemsData[index] || !counterDisplay) return;
+        
+        currentIndex = index;
+        currentScale = 1;
+        const item = itemsData[index];
+
+        modalContent.innerHTML = '';
+        counterDisplay.innerText = `${currentIndex + 1} / ${itemsData.length}`;
+
+        if (item.type === 'video') {
+            const video = document.createElement('video');
+            video.src = item.src!;
+            video.controls = true;
+            video.autoplay = true;
+            video.className = "max-w-full max-h-[85vh] rounded-xl shadow-2xl";
+            modalContent.appendChild(video);
+            
+            if (zoomInBtn) zoomInBtn.classList.add('hidden');
+            if (zoomOutBtn) zoomOutBtn.classList.add('hidden');
+        } else {
+            const img = document.createElement('img');
+            img.src = item.src!;
+            img.className = "max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl transition-transform duration-300 ease-out cursor-grab active:cursor-grabbing";
+            img.style.transform = `scale(${currentScale})`;
+            modalContent.appendChild(img);
+
+            if (zoomInBtn) zoomInBtn.classList.remove('hidden');
+            if (zoomOutBtn) zoomOutBtn.classList.remove('hidden');
+
+            gsap.fromTo(img, 
+                { opacity: 0, scale: 0.95 }, 
+                { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' }
+            );
+        }
+    };
+
+    gallerieItems.forEach((item, index) => {
+        item.addEventListener('click', () => {
+            if (modal) {
+                updateModalContent(index);
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modal.classList.add('opacity-100');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    });
+
+    const hideModal = () => {
+        if (modal) {
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = '';
+            const video = modalContent?.querySelector('video');
+            if (video) (video as HTMLVideoElement).pause();
+        }
+    };
+
+    closeModal?.addEventListener('click', hideModal);
+    modal?.addEventListener('click', (e) => {
+        if (e.target === modal) hideModal();
+    });
+
+    prevBtnMod?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const newIndex = (currentIndex - 1 + itemsData.length) % itemsData.length;
+        updateModalContent(newIndex);
+    });
+
+    nextBtnMod?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const newIndex = (currentIndex + 1) % itemsData.length;
+        updateModalContent(newIndex);
+    });
+
+    zoomInBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const img = modalContent?.querySelector('img');
+        if (img) {
+            currentScale = Math.min(currentScale + 0.25, 3);
+            img.style.transform = `scale(${currentScale})`;
+        }
+    });
+
+    zoomOutBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const img = modalContent?.querySelector('img');
+        if (img) {
+            currentScale = Math.max(currentScale - 0.25, 0.5);
+            img.style.transform = `scale(${currentScale})`;
+        }
+    });
+
+    window.addEventListener('keydown', (e) => {
+        if (modal?.classList.contains('opacity-100')) {
+            if (e.key === 'ArrowRight') nextBtnMod?.click();
+            if (e.key === 'ArrowLeft') prevBtnMod?.click();
+            if (e.key === 'Escape') hideModal();
+        }
+    });
+</script>

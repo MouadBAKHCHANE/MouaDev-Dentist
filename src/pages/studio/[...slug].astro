@@ -1,0 +1,22 @@
+---
+/**
+ * Sanity Studio embedded at /studio
+ * Uses client:only to render entirely in the browser (no SSR needed)
+ * Studio handles its own client-side routing via basePath: '/studio'
+ */
+import StudioPage from '../../components/StudioPage'
+
+---
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sanity Studio | Cabinet Dentaire Chorfi</title>
+    <style is:global>
+      html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+    </style>
+  </head>
+  <body style="height: 100vh;">
+    <StudioPage client:only="react" />
+  </body>
+</html>

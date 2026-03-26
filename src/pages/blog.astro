@@ -1,0 +1,203 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import PageHeader from '../components/PageHeader.astro';
+import AppointmentCTA from '../components/AppointmentCTA.astro';
+import { urlFor } from '../lib/sanity';
+import { getAllBlogPosts, getBlogPage } from '../lib/queries';
+
+const blogPage = await getBlogPage();
+const sanityPosts = await getAllBlogPosts();
+
+const posts = sanityPosts?.length ? sanityPosts.map((p: any) => ({
+    category: p.category,
+    title: p.title,
+    image: p.coverImage ? urlFor(p.coverImage).width(800).format('webp').url() : '/images/blog/veneers.png',
+    date: p.date ? new Date(p.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '',
+    desc: p.excerpt ?? '',
+    slug: p.slug,
+    tall: p.isTall ?? false
+})) : [
+  { category: "Esthétique dentaire", title: "Facettes et Couronnes : réinventer son sourire", image: "/images/blog/veneers.png", date: "12 Mars 2026", desc: "Découvrez comment le sourire sur mesure peut transformer votre harmonie faciale.", slug: "facettes-et-couronnes", tall: false },
+  { category: "Approche humaine", title: "Pourquoi l'écoute est notre meilleur outil", image: "/images/blog/listening.png", date: "10 Mars 2026", desc: "La peur du dentiste n'est pas une fatalité.", slug: "ecoute-meilleur-outil", tall: true },
+  { category: "Hygiène et prévention", title: "Le trio gagnant pour un sourire éclatant", image: "/images/blog/trio-sourire.png", date: "05 Mars 2026", desc: "Détartrage, aéropolissage et blanchiment.", slug: "trio-gagnant-sourire", tall: false }
+];
+
+const collectionPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Nos Articles | Cabinet Dentaire Chorfi",
+    "description": "Conseils dentaires, actualités du cabinet et articles sur l'hygiène bucco-dentaire par Dr Zainab Chorfi.",
+    "url": "https://www.cabinetdentairechorfi.com/blog",
+    "isPartOf": {
+        "@type": "WebSite",
+        "name": "Cabinet Dentaire Chorfi",
+        "url": "https://www.cabinetdentairechorfi.com"
+    },
+    "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": posts.map((p: any, i: number) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "url": `https://www.cabinetdentairechorfi.com/blog/${p.slug}`,
+            "name": p.title
+        }))
+    }
+};
+---
+
+<Layout
+    title="Nos Articles | Cabinet Dentaire Chorfi"
+    description="Conseils dentaires, actualités du cabinet et articles sur l'hygiène bucco-dentaire par Dr Zainab Chorfi."
+    breadcrumbs={[{ name: "Blog", href: "/blog" }]}
+    jsonLd={collectionPageJsonLd}
+>
+    <Navbar />
+    
+    <main>
+        <PageHeader
+            title={blogPage?.pageTitle ?? "Conseils et actualités dentaires"}
+            subtitle={blogPage?.pageBadge ?? "Articles"}
+        />
+
+        <section class="py-24 bg-white" id="blog-section">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                {/* Categories Filter */}
+                {((blogPage?.filterCategories?.length ? blogPage.filterCategories : []).filter(cat => cat !== 'Soin de Canal' && cat !== 'Prévention')).length > 0 && (
+                <div class="flex flex-wrap gap-4 mb-20 justify-center filter-container">
+                    {((blogPage?.filterCategories?.length ? blogPage.filterCategories : []).filter(cat => cat !== 'Soin de Canal' && cat !== 'Prévention')).map(cat => (
+                        <button
+                            class={`filter-btn px-6 py-2.5 rounded-full border border-black/5 transition-all duration-300 font-medium text-sm text-oralix-dark hover:bg-oralix-brand hover:border-oralix-brand`}
+                            data-category={cat}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                </div>
+                )}
+
+                {/* Blog Grid - Home Page Design */}
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-12 gap-y-20 items-start blog-grid">
+                    {posts.map((post) => (
+                        <div class="group cursor-pointer blog-item flex flex-col" data-category={post.category} onclick={`window.location.href='/blog/${post.slug}'`}>
+                            {/* Category & Date Label Above Image */}
+                            <div class="flex justify-between mb-3 overflow-hidden">
+                                <span class="text-[0.85rem] font-bold text-gray-400 group-hover:text-[#141C18] transform group-hover:-translate-y-px transition-all duration-300 uppercase tracking-wider">
+                                    {post.category}
+                                </span>
+                                <span class="text-[0.85rem] text-gray-400 opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-500 font-medium">
+                                    {post.date}
+                                </span>
+                            </div>
+
+                            {/* Image Container */}
+                            <div class="relative overflow-hidden rounded-[2rem] bg-gray-100 mb-8 aspect-[4/3] shadow-sm">
+                                <img 
+                                    src={post.image} 
+                                    alt={post.title} 
+                                    class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                                />
+                                <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            </div>
+
+                            {/* Title & Desc */}
+                            <div class="space-y-4">
+                                <h3 class="text-3xl font-bold font-bricolage text-[#141C18] leading-[1.2] group-hover:translate-x-1 group-hover:text-gray-600 transition-all duration-300">
+                                    {post.title}
+                                </h3>
+                                <p class="text-gray-500 leading-relaxed font-medium">
+                                    {post.desc}
+                                </p>
+                                
+                                <div class="pt-4 flex items-center gap-2 text-[#141C18] font-bold text-sm tracking-wide uppercase">
+                                    <span>{blogPage?.readArticleText ?? "Lire l'article"}</span>
+                                    <div class="w-8 h-8 rounded-full bg-[#141C18] text-white flex items-center justify-center transition-transform group-hover:translate-x-2 group-hover:bg-oralix-brand group-hover:text-[#141C18]">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+
+        <AppointmentCTA />
+    </main>
+
+    <Footer />
+</Layout>
+
+<script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Filter Logic
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const blogItems = document.querySelectorAll('.blog-item');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const category = btn.getAttribute('data-category');
+
+            // Update button styles
+            filterBtns.forEach(b => {
+                b.classList.remove('bg-oralix-brand', 'border-oralix-brand');
+                b.classList.add('hover:bg-oralix-brand', 'hover:border-oralix-brand');
+            });
+            btn.classList.add('bg-oralix-brand', 'border-oralix-brand');
+            btn.classList.remove('hover:bg-oralix-brand', 'hover:border-oralix-brand');
+
+            // Filter items with GSAP
+            blogItems.forEach((item: any) => {
+                const itemCategory = item.getAttribute('data-category');
+                
+                if (category === "Tous" || itemCategory === category) {
+                    gsap.to(item, {
+                        display: 'flex',
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        duration: 0.5,
+                        ease: 'power2.out'
+                    });
+                } else {
+                    gsap.to(item, {
+                        opacity: 0,
+                        y: 20,
+                        scale: 0.95,
+                        duration: 0.4,
+                        ease: 'power2.in',
+                        onComplete: () => {
+                            item.style.display = 'none';
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+    // Initial Animation
+    gsap.from('.blog-item', {
+        scrollTrigger: {
+            trigger: '.blog-grid',
+            start: 'top 85%',
+        },
+        y: 60,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.1,
+        ease: 'power3.out'
+    });
+</script>
+
+<style>
+    .font-bricolage {
+        font-family: 'Bricolage Grotesque', sans-serif;
+    }
+</style>

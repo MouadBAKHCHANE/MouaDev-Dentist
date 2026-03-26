@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --color-oralix-brand: #D1FC71;
+  --color-oralix-dark: #0D1B15;
+  --color-oralix-gray: #F5F4F7;
+  --color-oralix-text-main: #414651;
+  --color-oralix-text-mutated: #AAADB0;
+
+  --font-bricolage: "Bricolage Grotesque", sans-serif;
+  --font-inter: "Inter", sans-serif;
+
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.5rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-bricolage);
+}

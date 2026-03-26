@@ -1,0 +1,144 @@
+---
+import { urlFor } from '../lib/sanity';
+import { getAllBlogPosts, getHomePage } from '../lib/queries';
+
+const sanityPosts = await getAllBlogPosts();
+const homePage = await getHomePage();
+
+const posts = sanityPosts?.length ? sanityPosts.slice(0, 3).map((p: any) => ({
+    category: p.category,
+    title: p.title,
+    image: p.coverImage ? urlFor(p.coverImage).width(800).format('webp').url() : '/images/blog/veneers.png',
+    date: p.date ? new Date(p.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '',
+    slug: p.slug,
+    tall: p.isTall ?? false
+})) : [
+  { category: "Esthétique dentaire", title: "Facettes et Couronnes : réinventer son sourire", image: "/images/blog/veneers.png", date: "12 Mars 2026", slug: "facettes-et-couronnes", tall: false },
+  { category: "Approche humaine", title: "Pourquoi l'écoute est notre meilleur outil", image: "/images/blog/listening.png", date: "10 Mars 2026", slug: "ecoute-meilleur-outil", tall: true },
+  { category: "Hygiène et prévention", title: "Le trio gagnant pour un sourire éclatant", image: "/images/blog/trio-sourire.png", date: "05 Mars 2026", slug: "trio-gagnant-sourire", tall: false }
+];
+---
+
+<section class="bg-[#F6F7F9] py-16 lg:py-24" id="blog-section">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        
+        {/* Header */}
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-12 gap-8 blog-header">
+            <div>
+                {homePage?.blogBadge && (
+                <div class="flex items-center gap-2 text-gray-500 text-sm font-medium mb-4">
+                    <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                    {homePage?.blogBadge ?? "Articles"}
+                </div>
+                )}
+                <h2 class="text-4xl lg:text-6xl font-bricolage tracking-tight text-[#141C18]">
+                    {homePage?.blogTitle ?? "Nos articles"}
+                </h2>
+            </div>
+            
+            {/* Split Button - Desktop Only (in Header) */}
+            {homePage?.blogButtonText && (
+            <div class="hidden lg:flex items-center gap-2 group cursor-pointer w-fit" onclick="window.location.href='/blog'">
+                <div class="bg-[#d9f96b] text-[#141C18] font-medium rounded-full text-sm flex items-center justify-center px-8 h-12 transition-colors group-hover:bg-[#cbef5a]">
+                    {homePage?.blogButtonText ?? "Lire plus d'articles"}
+                </div>
+                <div class="bg-[#d9f96b] text-[#141C18] w-12 h-12 rounded-full flex items-center justify-center group-hover:bg-[#cbef5a] transition-colors overflow-hidden">
+                    <svg class="w-5 h-5 transition-transform duration-500 ease-out group-hover:rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19L19 5M19 5v10M19 5H9" />
+                    </svg>
+                </div>
+            </div>
+            )}
+        </div>
+
+        {/* Blog Grid */}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-10 items-start">
+            {posts.map((post) => (
+                <div class="group cursor-pointer blog-card" onclick={`window.location.href='/blog/${post.slug}'`}>
+                    {/* Category & Date Label Above Image */}
+                    <div class="flex justify-between mb-2 overflow-hidden">
+                        <span class="text-[0.75rem] font-medium text-gray-400 group-hover:text-[#141C18] transform group-hover:-translate-y-px transition-all duration-300">
+                            {post.category}
+                        </span>
+                        <span class="text-[0.75rem] text-gray-400 opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-500">
+                            {post.date}
+                        </span>
+                    </div>
+
+                    {/* Image Container */}
+                    <div class={`relative overflow-hidden rounded-[1.25rem] bg-gray-200 mb-4 transition-all duration-500 ${post.tall ? 'aspect-[2.3/2.8]' : 'aspect-[1.5/1]'}`}>
+                        <img 
+                            src={post.image} 
+                            alt={post.title} 
+                            class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                        />
+                        {/* Overlay Gradient on Hover */}
+                        <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    </div>
+
+                    {/* Title */}
+                    <h3 class="text-[1.2rem] font-medium font-bricolage text-[#141C18] leading-[1.3] group-hover:translate-x-1 group-hover:text-gray-600 transition-all duration-300">
+                        {post.title}
+                    </h3>
+                </div>
+            ))}
+        </div>
+        
+        {/* Mobile-only CTA below grid */}
+        {homePage?.blogButtonText && (
+        <div class="mt-16 flex justify-center lg:hidden blog-cta-mobile">
+            <div class="flex items-center gap-2 group cursor-pointer w-fit" onclick="window.location.href='/blog'">
+                <div class="bg-[#d9f96b] text-[#141C18] font-medium rounded-full text-sm flex items-center justify-center px-8 h-12 transition-colors active:bg-[#cbef5a]">
+                    {homePage?.blogButtonText ?? "Lire plus d'articles"}
+                </div>
+                <div class="bg-[#d9f96b] text-[#141C18] w-12 h-12 rounded-full flex items-center justify-center active:bg-[#cbef5a] transition-colors">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19L19 5M19 5v10M19 5H9" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        )}
+    </div>
+</section>
+
+<script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.from('.blog-header', {
+        scrollTrigger: {
+            trigger: '#blog-section',
+            start: 'top 85%',
+        },
+        y: 40,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out'
+    });
+
+    gsap.from('.blog-card', {
+        scrollTrigger: {
+            trigger: '#blog-section .grid',
+            start: 'top 90%',
+        },
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.15,
+        ease: 'power4.out'
+    });
+
+    gsap.from('.blog-cta-mobile', {
+        scrollTrigger: {
+            trigger: '.blog-cta-mobile',
+            start: 'top 95%',
+        },
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power3.out'
+    });
+</script>

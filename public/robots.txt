@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /studio/
+Disallow: /blog-article/
+
+Sitemap: https://www.cabinetdentairechorfi.com/sitemap-index.xml

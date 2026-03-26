@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+    title="Page introuvable | Cabinet Dentaire Chorfi"
+    description="La page que vous recherchez n'existe pas ou a été déplacée."
+    noIndex={true}
+>
+    <Navbar />
+
+    <main class="bg-white">
+        <section class="min-h-[70vh] flex items-center justify-center px-6 lg:px-8">
+            <div class="text-center max-w-xl mx-auto space-y-8">
+                <span class="text-[10rem] lg:text-[14rem] font-bold font-bricolage text-oralix-brand/20 leading-none block">404</span>
+                <div class="space-y-4 -mt-12 relative z-10">
+                    <h1 class="text-4xl lg:text-5xl font-bold font-bricolage text-oralix-dark tracking-tight">
+                        Page introuvable
+                    </h1>
+                    <p class="text-lg text-gray-500 leading-relaxed font-inter">
+                        Désolé, la page que vous recherchez n'existe pas ou a été déplacée.
+                    </p>
+                </div>
+                <div class="pt-4">
+                    <a href="/" class="inline-flex items-center gap-2 group">
+                        <div class="bg-oralix-brand text-oralix-dark font-bold rounded-full text-sm flex items-center justify-center px-8 h-12 transition-colors group-hover:bg-[#c4e661]">
+                            Retour à l'accueil
+                        </div>
+                        <div class="bg-oralix-brand text-oralix-dark w-12 h-12 rounded-full flex items-center justify-center group-hover:bg-[#c4e661] transition-colors overflow-hidden">
+                            <svg class="w-5 h-5 transition-transform duration-500 ease-out group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 12H5m0 0l7 7m-7-7l7-7" />
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <Footer />
+</Layout>

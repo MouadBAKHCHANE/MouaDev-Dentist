@@ -1,0 +1,28 @@
+---
+// src/components/FloatingContact.astro
+---
+<div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+    {/* Phone Button */}
+    <a 
+        href="tel:0644801152" 
+        class="w-12 h-12 lg:w-14 lg:h-14 bg-white text-oralix-dark rounded-full shadow-xl flex items-center justify-center border border-gray-100 hover:scale-110 active:scale-95 transition-all duration-300 group"
+        aria-label="Appeler le cabinet"
+    >
+        <svg class="w-5 h-5 lg:w-6 lg:h-6 group-hover:text-oralix-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+        </svg>
+    </a>
+
+    {/* WhatsApp Button */}
+    <a 
+        href="https://wa.me/212644801152" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        class="w-12 h-12 lg:w-14 lg:h-14 bg-oralix-brand text-oralix-dark rounded-full shadow-xl flex items-center justify-center border border-oralix-brand hover:scale-110 active:scale-95 transition-all duration-300 group"
+        aria-label="Nous contacter sur WhatsApp"
+    >
+        <svg class="w-6 h-6 lg:w-7 lg:h-7" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12.01 2.002c-5.523 0-10.002 4.478-10.002 10.002 0 1.966.568 3.805 1.55 5.334L2.001 22l4.825-1.503c1.474.887 3.232 1.401 5.084 1.401 5.522 0 10.001-4.478 10.001-10.002S17.532 2.002 12.01 2.002zm0 18.003c-1.571 0-3.05-.403-4.341-1.116l-.312-.186-3.14.978.995-3.03-.205-.327a8.552 8.552 0 0 1-1.353-4.536c0-4.664 3.79-8.455 8.455-8.455 4.665 0 8.455 3.791 8.455 8.455 0 4.663-3.79 8.454-8.455 8.454zm4.453-6.262c-.244-.122-1.442-.713-1.666-.795-.224-.082-.387-.122-.55.122-.163.245-.631.795-.774.958-.142.163-.285.184-.53.061-.244-.122-1.028-.379-1.956-1.206-.723-.644-1.21-1.44-1.353-1.684-.143-.245-.015-.377.107-.499.11-.11.245-.285.366-.428.123-.143.163-.245.245-.408.082-.163.041-.306-.02-.428-.061-.122-.55-1.326-.754-1.816-.199-.479-.402-.414-.55-.421-.143-.007-.306-.008-.469-.008s-.428.061-.652.306c-.224.245-.856.836-.856 2.039 0 1.203.876 2.366.998 2.529.123.163 1.724 2.632 4.175 3.692.583.253 1.038.404 1.393.516.586.186 1.12.16 1.543.097.472-.07 1.442-.59 1.646-1.161.204-.571.204-1.06.143-1.161-.061-.102-.224-.163-.469-.286z"/>
+        </svg>
+    </a>
+</div>

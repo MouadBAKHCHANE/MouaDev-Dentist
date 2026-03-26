@@ -1,0 +1,229 @@
+---
+import { urlFor } from '../lib/sanity';
+import { getBeforeAfterCases } from '../lib/queries';
+
+const sanityCases = await getBeforeAfterCases();
+
+const sliders = sanityCases?.length ? sanityCases.map((c: any) => ({
+    before: c.beforeImage ? urlFor(c.beforeImage).width(800).format('webp').url() : '',
+    after: c.afterImage ? urlFor(c.afterImage).width(800).format('webp').url() : '',
+    title: c.title
+})) : [
+  { before: "/images/Cas clinique/Facettes esthétiques after.webp", after: "/images/Cas clinique/Facettes esthétiques before.webp", title: "Facettes esthétiques" },
+  { before: "/images/Cas clinique/Couronnes esthétiques before.webp", after: "/images/Cas clinique/Couronnes esthétiques after.webp", title: "Couronnes esthétiques" },
+  { before: "/images/Cas clinique/ba_tooth_before.webp", after: "/images/Cas clinique/ba_tooth_after.webp", title: "Blanchiment" },
+  { before: "/images/Cas clinique/Couronne en Zircone before.webp", after: "/images/Cas clinique/Couronne en Zircone after.webp", title: "Couronne en Zircone" },
+  { before: "/images/Cas clinique/Détartrage before.webp", after: "/images/Cas clinique/Détartrage after.webp", title: "Détartrage" },
+  { before: "/images/Cas clinique/Restauration de double fracture before.webp", after: "/images/Cas clinique/Restauration de double fracture after.webp", title: "Restauration de double fracture" },
+  { before: "/images/Cas clinique/ba_radio_before.webp", after: "/images/Cas clinique/ba_radio_after.webp", title: "Extraction de dent de sagesse" },
+  { before: "/images/Cas clinique/ba_implants_before.webp", after: "/images/Cas clinique/ba_implants_after.webp", title: "Prothèse" }
+];
+---
+
+<section class="py-24 bg-white relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 mb-16 text-left before-after-header">
+        <div class="flex items-center justify-start gap-2 mb-6 text-gray-500 font-medium text-sm uppercase tracking-wider">
+            <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+            Pourquoi nous choisir
+        </div>
+        <h2 class="text-4xl lg:text-7xl font-medium font-bricolage text-black">
+            Galerie avant et après
+        </h2>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-16">
+            {sliders.map((slider) => (
+                <div class="flex flex-col gap-6">
+                    <div class="relative w-full aspect-[4/3] bg-gray-200 rounded-[2.5rem] overflow-hidden shadow-2xl slider-container cursor-ew-resize group/slider">
+                        
+                        {/* Badges (Always on top) */}
+                        <div class="absolute top-6 left-6 z-40 bg-black/70 backdrop-blur-md text-white px-5 py-2 rounded-full text-xs font-bold border border-white/10 pointer-events-none">
+                            Avant
+                        </div>
+                        <div class="absolute top-6 right-6 z-40 bg-[#D1F26E] text-[#141C18] px-5 py-2 rounded-full text-xs font-bold shadow-lg pointer-events-none">
+                            Après
+                        </div>
+
+                        {/* Avant Image (Bottom Layer) */}
+                        <div class="absolute inset-0">
+                            <img 
+                                src={slider.before} 
+                                alt="Avant" 
+                                class="w-full h-full object-cover"
+                            />
+                        </div>
+
+                        {/* Après Image (Top Layer) */}
+                        <div class="absolute inset-0 after-wrapper z-10" style="clip-path: inset(0 0 0 50%);">
+                            <img 
+                                src={slider.after} 
+                                alt="Après" 
+                                class="w-full h-full object-cover"
+                            />
+                        </div>
+
+                        {/* Slider Handle */}
+                        <div class="absolute inset-y-0 left-1/2 w-[2px] bg-white/80 z-30 slider-handle pointer-events-auto transition-transform duration-300 group-hover/slider:scale-x-110 cursor-pointer">
+                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center border-4 border-white active:scale-95 transition-transform">
+                                <div class="flex gap-2 text-[#141C18]">
+                                    <svg class="w-3.5 h-3.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M15 18l-6-6 6-6" />
+                                    </svg>
+                                    <svg class="w-3.5 h-3.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M9 18l6-6-6-6" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-2">
+                        <h3 class="text-lg lg:text-xl font-semibold text-black font-bricolage">{slider.title}</h3>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<style>
+    .slider-container {
+        user-select: none;
+    }
+</style>
+
+<script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Initial Header & Grid Animations
+    gsap.from('.before-after-header', {
+        scrollTrigger: {
+            trigger: '.before-after-header',
+            start: 'top 85%',
+            once: true,
+        },
+        y: 30,
+        opacity: 0,
+        duration: 1,
+        ease: 'expo.out'
+    });
+
+    gsap.from('.slider-container', {
+        scrollTrigger: {
+            trigger: '.slider-container',
+            start: 'top 85%',
+            once: true,
+        },
+        y: 50,
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.2,
+        ease: 'expo.out'
+    });
+
+    gsap.utils.toArray('.gallery-image').forEach((image: any) => {
+        gsap.from(image, {
+            scrollTrigger: {
+                trigger: image,
+                start: 'top 90%',
+                once: true
+            },
+            y: 40,
+            opacity: 0,
+            duration: 1,
+            ease: 'power3.out'
+        });
+    });
+
+    // Slider Logic for Multiple Instances
+    const initSlider = (container: HTMLElement) => {
+        const afterWrapper = container.querySelector('.after-wrapper') as HTMLElement;
+        const handle = container.querySelector('.slider-handle') as HTMLElement;
+
+        if (!afterWrapper || !handle) return;
+
+        let isDragging = false;
+        let hasDragged = false;
+        let startX = 0;
+
+        const updateSlider = (clientX: number, animate = false) => {
+            const rect = container.getBoundingClientRect();
+            const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+            const percentage = (x / rect.width) * 100;
+
+            if (animate) {
+                gsap.to(afterWrapper, {
+                    clipPath: `inset(0 0 0 ${percentage}%)`,
+                    duration: 0.5,
+                    ease: 'power2.out'
+                });
+                gsap.to(handle, {
+                    left: `${percentage}%`,
+                    duration: 0.5,
+                    ease: 'power2.out'
+                });
+            } else {
+                afterWrapper.style.clipPath = `inset(0 0 0 ${percentage}%)`;
+                handle.style.left = `${percentage}%`;
+            }
+        };
+
+        const onStart = (clientX: number) => {
+            isDragging = true;
+            hasDragged = false;
+            startX = clientX;
+        };
+
+        const onMove = (clientX: number) => {
+            if (!isDragging) return;
+            if (Math.abs(clientX - startX) > 5) {
+                hasDragged = true;
+            }
+            requestAnimationFrame(() => updateSlider(clientX, false));
+        };
+
+        const onEnd = () => {
+            setTimeout(() => {
+                isDragging = false;
+            }, 50);
+        };
+
+        // Mouse Events
+        container.addEventListener('mousedown', (e: any) => onStart(e.clientX));
+        window.addEventListener('mousemove', (e: any) => onMove(e.clientX));
+        window.addEventListener('mouseup', onEnd);
+
+        // Click to toggle
+        handle.addEventListener('click', (e) => {
+            if (hasDragged) {
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+            }
+            const rect = container.getBoundingClientRect();
+            const currentPosition = parseFloat(handle.style.left || '50');
+            const targetPercentage = currentPosition > 50 ? 5 : 95;
+            updateSlider(rect.left + (rect.width * targetPercentage / 100), true);
+        });
+
+        // Touch support
+        container.addEventListener('touchstart', (e: any) => {
+            onStart(e.touches[0].clientX);
+        });
+        window.addEventListener('touchmove', (e: any) => {
+            if (isDragging) {
+                onMove(e.touches[0].clientX);
+                if (e.cancelable) e.preventDefault();
+            }
+        }, { passive: false });
+        window.addEventListener('touchend', onEnd);
+    };
+
+    // Initialize all sliders
+    document.querySelectorAll('.slider-container').forEach((container) => {
+        initSlider(container as HTMLElement);
+    });
+</script>

@@ -1,0 +1,121 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import AppointmentCTA from '../../components/AppointmentCTA.astro';
+import { urlFor } from '../../lib/sanity';
+import { getBlogPostBySlug } from '../../lib/queries';
+
+const { id } = Astro.params;
+
+const sanityArticle = await getBlogPostBySlug(id!);
+
+const article = sanityArticle ? {
+    title: sanityArticle.title,
+    category: sanityArticle.category,
+    date: sanityArticle.date ? new Date(sanityArticle.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '',
+    author: sanityArticle.author ?? 'Dr Zainab Chorfi',
+    image: sanityArticle.coverImage ? urlFor(sanityArticle.coverImage).width(1200).format('webp').url() : '/images/blog/veneers.png',
+    content: sanityArticle.content ?? []
+} : {
+    title: "Article non trouvé",
+    category: "",
+    date: "",
+    author: "Dr Zainab Chorfi",
+    image: "/images/blog/veneers.png",
+    content: [{ type: "p", text: "Cet article n'a pas été trouvé." }]
+};
+
+const seo = sanityArticle?.seo;
+
+const blogPostJsonLd = sanityArticle ? {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": article.title,
+    "image": article.image,
+    "datePublished": sanityArticle.date || undefined,
+    "author": {
+        "@type": "Person",
+        "name": article.author
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Cabinet Dentaire Chorfi",
+        "logo": { "@type": "ImageObject", "url": "https://www.cabinetdentairechorfi.com/logo.webp" }
+    },
+    "description": sanityArticle.excerpt || undefined,
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": `https://www.cabinetdentairechorfi.com/blog/${id}`
+    }
+} : undefined;
+---
+
+<Layout
+    title={seo?.metaTitle ?? `${article.title} | Blog Cabinet Chorfi`}
+    description={seo?.metaDescription ?? sanityArticle?.excerpt}
+    ogImage={seo?.ogImage ? urlFor(seo.ogImage).width(1200).height(630).format('webp').url() : article.image}
+    noIndex={seo?.noIndex}
+    jsonLd={blogPostJsonLd}
+    breadcrumbs={[{ name: "Blog", href: "/blog" }, { name: article.title, href: `/blog/${id}` }]}
+>
+    <Navbar />
+    
+    <main class="bg-white pb-20">
+        {/* Dark Hero Header */}
+        <section class="relative min-h-[60vh] flex items-center pt-32 pb-20 bg-[#141C18] overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src={article.image} alt={article.title} class="w-full h-full object-cover opacity-40" />
+                <div class="absolute inset-0 bg-gradient-to-t from-[#141C18] via-[#141C18]/60 to-transparent"></div>
+            </div>
+
+            <div class="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 w-full text-center lg:text-left">
+                <div class="flex flex-col gap-6 items-center lg:items-start">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-oralix-brand text-oralix-dark rounded-full text-xs font-bold uppercase tracking-wider">
+                        {article.category}
+                    </div>
+                    <h1 class="text-4xl lg:text-6xl font-bold font-bricolage text-white leading-[1.1] tracking-tight max-w-3xl">
+                        {article.title}
+                    </h1>
+                    <div class="flex items-center gap-4 text-white/60 text-sm font-medium border-b border-white/10 pb-6 w-full lg:w-fit">
+                        <span>Par {article.author}</span>
+                        <span class="w-1 h-1 rounded-full bg-white/20"></span>
+                        <span>{article.date}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <article class="max-w-4xl mx-auto px-6 lg:px-8 -mt-10 relative z-20">
+            <div class="bg-white rounded-[2.5rem] p-8 lg:p-16 shadow-xl">
+                <div class="flex flex-col gap-8 text-gray-600 text-lg lg:text-xl leading-relaxed font-inter">
+                    {article.content.map(block => {
+                        if (block.type === "h2") return <h2 class="text-3xl font-bold font-bricolage text-[#141C18] mt-6">{block.text}</h2>;
+                        return <p>{block.text}</p>;
+                    })}
+                </div>
+            </div>
+
+            <div class="mt-20 border-t border-black/5 pt-20">
+                <a href="/blog" class="inline-flex items-center gap-2 text-[#141C18] font-bold hover:translate-x-[-8px] transition-transform">
+                    <svg class="w-5 h-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                    </svg>
+                    Retour aux articles
+                </a>
+            </div>
+        </article>
+
+        <section class="mt-24">
+            <AppointmentCTA />
+        </section>
+    </main>
+
+    <Footer />
+</Layout>
+
+<style>
+    .font-bricolage {
+        font-family: 'Bricolage Grotesque', sans-serif;
+    }
+</style>

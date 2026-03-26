@@ -1,0 +1,165 @@
+---
+import { urlFor } from '../lib/sanity';
+import { getHomePage } from '../lib/queries';
+
+const homePage = await getHomePage();
+
+const aboutText = homePage?.aboutText ?? "Situé en plein centre de Salé, le Cabinet Dentaire Chorfi propose des soins dentaires de qualité dans un cadre calme, professionnel et rassurant. Le cabinet dispose d'équipements récents, d'une approche humaine et d'une écoute attentive de chaque patient. Votre confort et votre confiance sont au cœur de notre engagement.";
+const words = aboutText.split(' ');
+
+const doctorImage = homePage?.aboutDoctorImage ? urlFor(homePage.aboutDoctorImage).width(800).format('webp').url() : "/images/le cabinet/dr-chorfi-office.jpg.webp";
+const doctorName = homePage?.aboutDoctorName ?? "Dr Chorfi Zainab";
+const doctorTitle = homePage?.aboutDoctorTitle ?? "Chirurgien-Dentiste";
+
+const pillars = homePage?.pillars?.length ? homePage.pillars : [
+    { title: "Expertise", description: "Plusieurs années de savoir-faire au service de votre sourire." },
+    { title: "Sérénité", description: "Une approche douce et psychologique pour des soins sans stress." },
+    { title: "Innovation", description: "Des technologies de pointe pour une précision maximale." },
+    { title: "Accompagnement", description: "Un parcours de soin sur mesure et un suivi attentif." }
+];
+---
+<section class="bg-[#F6F7F9] pt-12 lg:pt-16 pb-24 lg:pb-32" id="about-section">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        
+        {/* Main Content Layout */}
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-24 lg:items-stretch">
+            
+            {/* Left Column: Dr Chorfi Card */}
+            <div class="lg:col-span-5 about-image-fade">
+                <div class="group relative overflow-hidden rounded-[2.5rem] aspect-[4/5] shadow-2xl h-full">
+                    <img 
+                        src={doctorImage}
+                        alt="Dr Chorfi Zainab" 
+                        id="dr-image"
+                        class="w-full h-full object-cover grayscale transition-transform duration-1000 group-hover:scale-105"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-10">
+                        <h3 class="text-3xl font-semibold text-white mb-2 font-bricolage">{doctorName}</h3>
+                        <p class="text-white/80 text-lg">{doctorTitle}</p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Right Column: Text and Content */}
+            <div class="lg:col-span-7 flex flex-col">
+                <div class="flex flex-col items-start gap-8">
+                    {homePage?.aboutBadge && (
+                    <div class="flex items-center gap-2 text-gray-500 text-sm font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#141C18]"></span>
+                        {homePage?.aboutBadge ?? "Qui sommes-nous ?"}
+                    </div>
+                    )}
+
+                    <h2 class="text-base lg:text-[1.35rem] leading-[1.6] font-bricolage tracking-tight scrub-text-container">
+                        {words.map((word) => (
+                            <span class="scrub-word text-[#141C18]/15" set:html={word + ' '} />
+                        ))}
+                    </h2>
+                </div>
+                
+                {/* Custom Split Button - Pushed near bottom but lifted slightly */}
+                {homePage?.aboutButtonText && (
+                <div class="flex items-center gap-2 about-button-fade group cursor-pointer w-fit mt-12 lg:mt-auto lg:mb-10" onclick={`window.location.href='${homePage?.aboutButtonLink ?? "/qui-sommes-nous"}'`}>
+                    <a href={homePage?.aboutButtonLink ?? "/qui-sommes-nous"} class="bg-[#cbfb45] text-[#141C18] font-medium rounded-full text-sm block overflow-hidden h-12 w-[280px] relative transition-colors group-hover:bg-[#bdf333]">
+                        <div class="absolute inset-0 flex flex-col h-[200%] w-full transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)] group-hover:-translate-y-1/2">
+                            <span class="flex items-center justify-center h-12 w-full">{homePage?.aboutButtonText ?? "À propos du Cabinet Dentaire Chorfi"}</span>
+                            <span class="flex items-center justify-center h-12 w-full">{homePage?.aboutButtonText ?? "À propos du Cabinet Dentaire Chorfi"}</span>
+                        </div>
+                    </a>
+                    <a href={homePage?.aboutButtonLink ?? "/qui-sommes-nous"} class="relative overflow-hidden bg-[#cbfb45] text-[#141C18] w-12 h-12 rounded-full flex items-center justify-center group-hover:bg-[#bdf333] transition-colors">
+                        <svg class="w-5 h-5 transition-transform duration-500 ease-out group-hover:rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19L19 5M19 5v10M19 5H9" />
+                        </svg>
+                    </a>
+                </div>
+                )}
+            </div>
+        </div>
+
+        {/* Bottom Part: Pillars Grid */}
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12 pt-16 mt-8 stat-fade border-t border-gray-200/60">
+            
+            {pillars.map((pillar) => (
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-[#cbfb45]/20 flex items-center justify-center">
+                            <span class="w-2 h-2 rounded-full bg-[#141C18]"></span>
+                        </div>
+                        <h3 class="text-xl font-semibold font-bricolage text-[#141C18]">{pillar.title}</h3>
+                    </div>
+                    <p class="text-gray-500 text-sm leading-relaxed">{pillar.description}</p>
+                </div>
+            ))}
+            
+        </div>
+    </div>
+</section>
+
+<script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.to('.scrub-word', {
+        scrollTrigger: {
+            trigger: '.scrub-text-container',
+            start: 'top 80%',
+            end: 'bottom 50%',
+            scrub: true,
+        },
+        color: '#141C18',
+        stagger: 0.1
+    });
+
+    gsap.from('.about-image-fade', {
+        scrollTrigger: {
+            trigger: '#about-section',
+            start: 'top 75%',
+        },
+        x: -40,
+        opacity: 0,
+        duration: 1.2,
+        ease: 'power3.out'
+    });
+
+    // Grayscale to color transition on scroll
+    gsap.fromTo('#dr-image', 
+        { filter: 'grayscale(100%)' },
+        {
+            filter: 'grayscale(0%)',
+            scrollTrigger: {
+                trigger: '#dr-image',
+                start: 'top 85%',
+                end: 'top 25%',
+                scrub: 0.2, // Very rapid response to scroll
+            },
+            ease: 'none'
+        }
+    );
+
+    gsap.from('.about-button-fade', {
+        scrollTrigger: {
+            trigger: '#about-section',
+            start: 'top 70%',
+        },
+        y: 20,
+        opacity: 0,
+        duration: 0.8,
+        delay: 0.2,
+        ease: 'power3.out'
+    });
+
+    gsap.from('.stat-fade div', {
+        scrollTrigger: {
+            trigger: '.stat-fade',
+            start: 'top 85%',
+        },
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power3.out'
+    });
+</script>

@@ -1,0 +1,246 @@
+---
+import { urlFor } from '../lib/sanity';
+import { getSiteSettings } from '../lib/queries';
+
+const settings = await getSiteSettings();
+
+const logoSrc = settings?.logo?.asset ? urlFor(settings.logo).height(72).format('webp').url() : '/logo.webp';
+const appointmentUrl = settings?.appointmentUrl ?? '/contact';
+const whatsappNumber = settings?.whatsappNumber ?? '212644801152';
+const googleMapsUrl = settings?.googleMapsUrl ?? 'https://www.google.com/maps/place/CABINET+DENTAIRE+CHORFI+Dr+CHORFI+Zainab/@34.0377681,-6.8033237,17z/data=!4m16!1m9!3m8!1s0xda741f8f835d4d3:0x52d01fb697aaeaf4!2sCABINET+DENTAIRE+CHORFI+Dr+CHORFI+Zainab!8m2!3d34.0378219!4d-6.803389!9m1!1b1!16s%2Fg%2F11x8_5f85j!3m5!1s0xda741f8f835d4d3:0x52d01fb697aaeaf4!8m2!3d34.0378219!4d-6.803389!16s%2Fg%2F11x8_5f85j?entry=ttu&g_ep=EgoyMDI2MDIyNS4wIKXMDSoASAFQAw%3D%3D';
+
+const defaultNavLinks = [
+    { href: '/', label: 'Accueil' },
+    { href: '/qui-sommes-nous', label: 'Le cabinet' },
+    { href: '/services', label: 'Nos soins' },
+    { href: '/blog', label: 'Articles' },
+    { href: '/contact', label: 'Contact' }
+];
+const navLinks = settings?.navLinks?.length ? settings.navLinks : defaultNavLinks;
+
+const socialLinks = settings?.socialLinks ?? [
+    { platform: 'instagram', url: 'https://www.instagram.com/cabinet.dentaire.chorfi/' },
+    { platform: 'facebook', url: 'https://www.facebook.com/61576404963248/about/' },
+    { platform: 'whatsapp', url: `https://wa.me/${whatsappNumber}` },
+    { platform: 'dentisto', url: 'https://dentisto.ma/rendez-vous/docteurs/chorfi-zainab-2520' }
+];
+
+const instagramUrl = socialLinks.find((s: any) => s.platform === 'instagram')?.url ?? 'https://www.instagram.com/cabinet.dentaire.chorfi/';
+const facebookUrl = socialLinks.find((s: any) => s.platform === 'facebook')?.url ?? 'https://www.facebook.com/61576404963248/about/';
+const whatsappUrl = socialLinks.find((s: any) => s.platform === 'whatsapp')?.url ?? `https://wa.me/${whatsappNumber}`;
+const dentistoUrl = socialLinks.find((s: any) => s.platform === 'dentisto')?.url ?? 'https://dentisto.ma/rendez-vous/docteurs/chorfi-zainab-2520';
+---
+<nav class="fixed top-0 left-0 w-full z-50 py-3" id="navbar" style="background-color: transparent; transition: all 0.3s ease;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between">
+        
+        {/* Logo - Start */}
+        <div class="flex-1 lg:w-1/3 flex justify-start">
+            <a href="/" class="flex-shrink-0 flex items-center gap-2">
+                <img src={logoSrc} alt="Cabinet Dentaire Chorfi" id="main-logo" class="h-14 lg:h-18 w-auto transition-all duration-300" style="filter: brightness(0) invert(1);" />
+            </a>
+        </div>
+
+        {/* Desktop Menu - Center */}
+        <div class="hidden lg:flex w-1/3 justify-center">
+            <div class="flex items-center space-x-6 lg:space-x-8">
+                {navLinks.map((link: any, i: number) => (
+                    <a href={link.href} class={`${i === 0 ? 'text-white' : 'text-white/90'} hover:text-oralix-brand transition-colors text-sm font-medium whitespace-nowrap`}>{link.label}</a>
+                ))}
+            </div>
+        </div>
+
+        {/* CTA Button & Mobile Toggle - End */}
+        <div class="flex-1 lg:w-1/3 flex justify-end items-center gap-4">
+            <div class="hidden lg:flex items-center gap-3">
+                <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-white/20 text-white hover:bg-white hover:text-oralix-dark transition-all duration-300 group" title="Localisation">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </a>
+                <a href="/contact" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 border border-transparent text-sm font-semibold rounded-full text-oralix-dark bg-oralix-brand hover:scale-105 transition-transform group whitespace-nowrap">
+                    {settings?.ctaButtonText ?? "Prendre Rendez-vous"}
+                    <svg class="w-3.5 h-3.5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </a>
+            </div>
+
+            {/* Mobile menu button */}
+            <div class="lg:hidden flex justify-end items-center">
+                <button type="button" class="text-white hover:text-oralix-brand focus:outline-none py-2 pl-2 pr-0 relative z-[60]" id="mobile-menu-button" aria-label="Toggle Menu">
+                    <svg class="h-8 w-8 transition-all duration-300" id="hamburger-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+                    </svg>
+                    <svg class="h-8 w-8 absolute top-2 right-0 opacity-0 scale-50 transition-all duration-300" id="close-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+{/* Mobile Menu Overlay */}
+    <div class="fixed inset-0 bg-oralix-dark z-[55] translate-x-full transition-transform duration-500 ease-out lg:hidden flex flex-col pt-10 px-6 overflow-y-auto" id="mobile-menu">
+        {/* Mobile Menu Logo */}
+        <div class="flex justify-center mb-12 mobile-menu-item opacity-0">
+             <img src={logoSrc} alt="Cabinet Dentaire Chorfi" class="h-24 w-auto brightness-0 invert" />
+        </div>
+
+        <div class="flex flex-col space-y-6 text-center mb-10">
+            {navLinks.map((link: any) => (
+                <a href={link.href} class="mobile-link mobile-menu-item opacity-0 text-white text-3xl font-semibold hover:text-oralix-brand transition-colors">{link.label}</a>
+            ))}
+        </div>
+
+        <div class="mt-auto pb-12 flex flex-col items-center space-y-10 mobile-menu-item opacity-0">
+            <div class="flex flex-col items-center gap-4 w-full px-6">
+                <a href="/contact" class="w-full max-w-xs inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold rounded-full text-oralix-dark bg-oralix-brand hover:scale-105 transition-transform shadow-xl">
+                    {settings?.ctaButtonText ?? "Prendre Rendez-vous"}
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </a>
+                <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" class="w-full max-w-xs inline-flex items-center justify-center gap-2 px-8 py-3 text-base font-semibold rounded-full text-white border border-white/20 hover:bg-white/10 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-oralix-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Voir Localisation
+                </a>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <a href={instagramUrl} target="_blank" rel="noopener noreferrer" class="text-white/80 hover:text-oralix-brand transition-all hover:scale-110" aria-label="Instagram">
+                    <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                </a>
+                <a href={facebookUrl} target="_blank" rel="noopener noreferrer" class="text-white/80 hover:text-oralix-brand transition-all hover:scale-110" aria-label="Facebook">
+                    <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </a>
+                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="text-white/80 hover:text-oralix-brand transition-all hover:scale-110" aria-label="WhatsApp">
+                    <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M12.01 2.002c-5.523 0-10.002 4.478-10.002 10.002 0 1.966.568 3.805 1.55 5.334L2.001 22l4.825-1.503c1.474.887 3.232 1.401 5.084 1.401 5.522 0 10.001-4.478 10.001-10.002S17.532 2.002 12.01 2.002zm0 18.003c-1.571 0-3.05-.403-4.341-1.116l-.312-.186-3.14.978.995-3.03-.205-.327a8.552 8.552 0 0 1-1.353-4.536c0-4.664 3.79-8.455 8.455-8.455 4.665 0 8.455 3.791 8.455 8.455 0 4.663-3.79 8.454-8.455 8.454zm4.453-6.262c-.244-.122-1.442-.713-1.666-.795-.224-.082-.387-.122-.55.122-.163.245-.631.795-.774.958-.142.163-.285.184-.53.061-.244-.122-1.028-.379-1.956-1.206-.723-.644-1.21-1.44-1.353-1.684-.143-.245-.015-.377.107-.499.11-.11.245-.285.366-.428.123-.143.163-.245.245-.408.082-.163.041-.306-.02-.428-.061-.122-.55-1.326-.754-1.816-.199-.479-.402-.414-.55-.421-.143-.007-.306-.008-.469-.008s-.428.061-.652.306c-.224.245-.856.836-.856 2.039 0 1.203.876 2.366.998 2.529.123.163 1.724 2.632 4.175 3.692.583.253 1.038.404 1.393.516.586.186 1.12.16 1.543.097.472-.07 1.442-.59 1.646-1.161.204-.571.204-1.06.143-1.161-.061-.102-.224-.163-.469-.286z"/></svg>
+                </a>
+                <a href={dentistoUrl} target="_blank" rel="noopener noreferrer" class="text-white/80 hover:text-oralix-brand transition-all hover:scale-110" aria-label="Appointment">
+                    <svg class="w-7 h-7 fill-current rotate-[180deg]" viewBox="0 0 512 512"><path d="M141.8 494.5c-15.7-2.5-31.9-9-46.5-18.7-10-6.7-26.2-22.9-33.8-33.7-21.8-31.2-33.4-77.4-28.4-113.8 3-22.4 8.8-37.7 32.3-85.1 20.9-42.1 29.2-60.2 52.8-115.2 33.4-77.7 45.9-98.5 65.4-108.1 6.5-3.2 7.4-3.4 17.4-3.4 12.7.1 18.7 2.2 25.1 9.2 10.4 11.3 13.9 31.1 13.9 78.2 0 38.6 2.4 64.2 7 73.6 4.2 8.7 13.8 8.7 18 0 4.6-9.4 7-35 7-73.6 0-47.1 3.5-66.9 13.9-78.2 6.4-7 12.4-9.1 25.1-9.2 10 0 10.9.2 17.4 3.4 19.5 9.6 31.9 30.2 65.4 108.1 23.8 55.2 32 73.2 52.8 115.2 10 20.2 20 41.4 22.2 47 9.8 25.7 12.8 47.1 10.2 72.8-5.6 54-34 99.3-75.6 120.6-21.5 10.9-44.4 14.5-69.2 10.8-19.1-2.8-37-9.6-53.7-20.4-10.7-7-16.2-9-24.5-9-8.3 0-13.8 2-24.7 9.1-27.3 17.7-59.6 25-89.5 20.4zm35.2-16c17.4-2.9 32.5-9 49-20 15.6-10.3 31.7-17 51.1-21.2 10.5-2.2 45.2-2.5 56.9-.5 8.2 1.5 30.1 6.9 30.8 7.7.5.4-3.8 15.5-4.3 15.5-.1 0-2.7-.9-5.8-1.9-14.3-5-26.1-6.6-47.2-6.5-11 .1-22 .5-24.4 1l-4.4.9 8.4 5.7c10.7 7.1 18.7 11.1 29.7 14.8 30.1 10.1 60 7.1 86.4-8.6 11.1-6.6 28.6-23.8 36.3-35.7 10.5-16.3 17.5-33.9 21.7-54.9 1.8-9.1 2.2-14.8 2.2-28.8 0-15.7-.2-18.6-2.6-28.2-4.2-16.5-7.5-24.2-28.8-67.8-22.9-46.8-29-60-52.2-114-35.8-83.4-47.5-101.8-66-103.7-14.5-1.5-20.7 5.3-23.8 26.2-.6 3.9-1.5 25.7-2 48.5-.9 43.3-2.3 59.2-6 71.1-2.8 9.1-7 15.2-12.7 18.6-4.3 2.5-5.8 2.8-13.3 2.8-7.5 0-9-.3-13.3-2.8-5.7-3.4-9.9-9.5-12.7-18.6-3.7-11.9-5.1-27.8-6-71.1-.5-22.8-1.4-44.6-2-48.5-3.1-20.9-9.3-27.7-23.8-26.2-18.5 1.9-30.3 20.5-66.1 103.8-23.6 54.9-29.4 67.6-52.1 113.9-20.9 42.5-24.6 51.1-28.6 67.5-8.6 34.8-.2 79.4 21.1 112.2 7.8 12 25.2 29.2 36.3 35.7 21.3 12.6 44 17 68.2 13.1z"/></svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+<style>
+    /* Mobile Menu Toggle Animation */
+    
+    :global(#navbar.menu-open-nav) {
+        z-index: 60 !important;
+        background-color: transparent !important;
+        backdrop-filter: none !important;
+        box-shadow: none !important;
+        border-bottom: none !important;
+    }
+    
+    :global(#navbar.menu-open-nav #main-logo) {
+        opacity: 0 !important;
+    }
+    
+    :global(#mobile-menu-button.menu-active #hamburger-icon) {
+        opacity: 0;
+        transform: scale(0.5) rotate(90deg);
+    }
+    
+    :global(#mobile-menu-button.menu-active #close-icon) {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+
+    /* When navbar gets the .scrolled class, turn the logo black */
+    :global(#navbar.scrolled #main-logo) {
+        filter: brightness(0) invert(0) !important;
+    }
+    
+    /* Make text links and icons dark when scrolled (only if menu is closed) */
+    :global(#navbar.scrolled:not(.menu-open-nav) a),
+    :global(#navbar.scrolled:not(.menu-open-nav) button) {
+        color: #0D1B15 !important;
+    }
+    
+    /* Ensure the CTA button text stays dark and doesn't get messed up */
+    :global(#navbar.scrolled .bg-oralix-brand) {
+        color: #0D1B15 !important;
+    }
+</style>
+
+<script>
+    import gsap from 'gsap';
+
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+    
+    function toggleMenu() {
+        const isOpen = mobileMenu.classList.toggle('menu-open');
+        mobileMenu.classList.toggle('translate-x-full');
+        mobileMenu.classList.toggle('translate-x-0');
+        mobileMenuButton.classList.toggle('menu-active');
+        navbar.classList.toggle('menu-open-nav');
+        
+        // Disable body scroll when menu is open
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+
+        // Staggered animation for menu items
+        if (isOpen) {
+            gsap.fromTo('.mobile-menu-item', 
+                { y: 30, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out', delay: 0.2 }
+            );
+        } else {
+            // Re-hide items when menu closes to reset state
+            gsap.to('.mobile-menu-item', { opacity: 0, duration: 0.3 });
+        }
+    }
+
+    mobileMenuButton.addEventListener('click', toggleMenu);
+
+    // Close menu when a link is clicked
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (mobileMenu.classList.contains('menu-open')) {
+                toggleMenu();
+            }
+        });
+    });
+    
+    function applyScrolled() {
+        navbar.style.backgroundColor = '#ffffff';
+        navbar.style.backdropFilter = 'blur(12px)';
+        navbar.style.boxShadow = '0 4px 6px -1px rgb(0 0 0 / 0.1)';
+        navbar.style.paddingTop = '0.5rem';
+        navbar.style.paddingBottom = '0.5rem';
+        navbar.classList.add('scrolled');
+    }
+
+    function removeScrolled() {
+        navbar.style.backgroundColor = 'transparent';
+        navbar.style.backdropFilter = 'none';
+        navbar.style.boxShadow = 'none';
+        navbar.style.paddingTop = '0.75rem';
+        navbar.style.paddingBottom = '0.75rem';
+        navbar.classList.remove('scrolled');
+    }
+
+    // Check initial scroll position on load
+    if (window.scrollY > 50) {
+        applyScrolled();
+    }
+
+    // Add scroll event listener
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            applyScrolled();
+        } else {
+            removeScrolled();
+        }
+    });
+</script>

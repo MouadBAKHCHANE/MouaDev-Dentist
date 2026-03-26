@@ -1,0 +1,287 @@
+---
+import { urlFor } from '../lib/sanity';
+import { getProcessSteps, getHomePage, getSiteSettings } from '../lib/queries';
+
+const sanitySteps = await getProcessSteps();
+const homePage = await getHomePage();
+const settings = await getSiteSettings();
+
+const steps = sanitySteps?.length ? sanitySteps.map((s: any, i: number) => ({
+    number: String(i + 1).padStart(2, '0'),
+    title: s.title,
+    desc: s.description,
+    features: s.features ?? [],
+    image: s.image ? urlFor(s.image).width(800).format('webp').url() : `/images/process/step${i + 1}.webp`
+})) : [
+    {
+        number: "01",
+        title: "Prendre Rendez-vous",
+        desc: "N'attendez pas pour offrir à votre sourire les soins qu'il mérite. Que ce soit pour un contrôle de routine, un traitement esthétique ou une urgence dentaire, notre équipe d'experts est là pour vous. Réservez votre visite en quelques clics et profitez de soins dentaires personnalisés dans un cadre confortable et moderne.",
+        features: ["Réservation en ligne facile", "Horaires flexibles selon votre emploi du temps", "Professionnels dentaires experts et accueillants", "Rendez-vous le jour même ou le lendemain"],
+        image: "/images/process/step1.webp"
+    },
+    {
+        number: "02",
+        title: "Consultation & Évaluation",
+        desc: "Votre chemin vers un sourire sain et éclatant commence par une consultation et une évaluation approfondies. Notre équipe dentaire expérimentée évaluera votre santé bucco-dentaire, discutera de vos préoccupations et créera un plan de traitement personnalisé rien que pour vous.",
+        features: ["Identifier tôt tout problème dentaire", "Conseils personnalisés", "Soins professionnels et bienveillants", "Outils de diagnostic avancés"],
+        image: "/images/process/Consultation.png"
+    },
+    {
+        number: "03",
+        title: "Plan de Traitement Personnalisé",
+        desc: "Nous créons une feuille de route pour votre santé dentaire. Notre équipe explique clairement chaque option, s'assurant que vous êtes à l'aise et informé. Votre plan est optimisé tant pour l'esthétique que pour la santé bucco-dentaire à long terme.",
+        features: ["Solutions sur mesure", "Plan clair et transparent", "Soins axés sur le confort", "Résultats optimisés"],
+        image: "/images/process/plan de traitement.png"
+    },
+    {
+        number: "04",
+        title: "Traitement & Suivi",
+        desc: "Notre engagement ne s'arrête pas à votre intervention. Des traitements de routine aux soins dentaires avancés, nous veillons à ce que chaque étape soit soigneusement gérée et que votre récupération soit étroitement surveillée pour des résultats optimaux.",
+        features: ["Traitement expert", "Conseils post-traitement", "Soins continus", "Approche centrée sur le patient"],
+        image: "/images/process/Traitement.png"
+    }
+];
+---
+
+<section class="bg-[#F6F7F9] py-24 relative z-10" id="process">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        
+        {/* Header */}
+        {(homePage?.processBadge || homePage?.processTitle) && (
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-20 gap-8 process-header">
+            <div class="lg:max-w-2xl">
+                <div class="flex items-center gap-2 mb-4 text-gray-400 font-bold uppercase text-[10px] tracking-[0.2em] animate-badge">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#D1F26E]"></span>
+                    {homePage?.processBadge ?? "Notre Méthode de Travail"}
+                </div>
+                <h2 class="text-5xl lg:text-7xl font-medium text-[#141C18] leading-[1.05] font-bricolage tracking-tight animate-title">
+                    {homePage?.processTitle ?? "Processus de"} <span class="text-gray-400 italic font-normal">{homePage?.processTitleHighlight ?? "Soin"}</span>
+                </h2>
+            </div>
+            <div class="lg:max-w-[18rem] pb-2">
+                <p class="text-gray-500 text-sm leading-relaxed font-inter animate-desc">
+                    {homePage?.processSubtitle ?? "De votre première visite à votre check-up final, nous avons simplifié chaque étape pour votre confort."}
+                </p>
+            </div>
+        </div>
+        )}
+
+        {/* Steps List */}
+        <div class="flex flex-col -space-y-px">
+            {steps.map((step) => (
+                <div class="process-step group bg-[#DCE4C9] first:rounded-t-[2.5rem] last:rounded-b-[2.5rem] overflow-hidden border border-black/5 relative transition-all duration-500">
+                    <button class="w-full flex items-center justify-between px-6 py-8 lg:px-10 lg:py-8 text-left accordion-trigger outline-none cursor-pointer">
+                        <div class="flex items-center gap-6 lg:gap-10 flex-1">
+                            {/* Number in circle */}
+                            <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-full border border-black/20 flex items-center justify-center text-xs lg:text-sm font-bold font-bricolage text-[#141C18] number-circle transition-all duration-500 bg-white/30">
+                                {step.number}
+                            </div>
+                            
+                            {/* Title */}
+                            <h3 class="text-xl lg:text-3xl font-bold font-bricolage text-[#141C18] tracking-tight step-title transition-colors duration-500">
+                                {step.title}
+                            </h3>
+                        </div>
+
+                        {/* Toggle Button */}
+                        <div class="w-8 h-8 lg:w-11 lg:h-11 rounded-full bg-white flex items-center justify-center transition-all duration-500 shadow-sm toggle-btn border border-black/5 group-hover:scale-110">
+                            <span class="relative w-4 h-4 flex items-center justify-center">
+                                <span class="absolute w-full h-0.5 bg-[#141C18] rounded-full transition-transform duration-500 horizontal-line"></span>
+                                <span class="absolute w-0.5 h-full bg-[#141C18] rounded-full vertical-line transition-transform duration-500"></span>
+                            </span>
+                        </div>
+                    </button>
+                    
+                    {/* Content */}
+                    <div class="h-0 opacity-0 overflow-hidden accordion-content">
+                        <div class="px-6 pb-14 lg:px-12 lg:pb-12 pt-0">
+                            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                                {/* Left Side: Image */}
+                                <div class="relative rounded-3xl overflow-hidden aspect-[4/3] lg:aspect-auto lg:h-[400px]">
+                                    <img src={step.image} alt={step.title} class="w-full h-full object-cover" />
+                                </div>
+
+                                {/* Right Side: Details */}
+                                <div class="flex flex-col gap-8">
+                                    <p class="text-lg leading-relaxed font-inter step-desc transition-colors duration-500">
+                                        {step.desc}
+                                    </p>
+
+                                    <ul class="flex flex-col gap-4">
+                                        {step.features.map(feature => (
+                                            <li class="flex items-center gap-3 text-sm lg:text-base font-inter step-feature transition-colors duration-500 text-gray-700">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
+                                                {feature}
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    <div>
+                                        <a href="#contact" class="inline-flex items-center gap-2 bg-[#D1F26E] hover:bg-[#c4e661] text-[#141C18] font-bold px-8 py-4 rounded-full transition-all duration-300 group/btn">
+                                            {settings?.ctaButtonText ?? "Prendre Rendez-vous"}
+                                            <div class="w-8 h-8 rounded-full bg-[#E1F996] flex items-center justify-center group-hover/btn:rotate-45 transition-transform duration-300">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                                </svg>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+    <style>
+    .process-step {
+        transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .process-step.active {
+        background-color: #141C18;
+        border-radius: 2.5rem !important;
+        z-index: 20;
+    }
+
+    .process-step.active .step-title {
+        color: #FFFFFF;
+    }
+
+    .process-step.active .step-desc {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .process-step.active .step-feature {
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .process-step.active .number-circle {
+        border-color: rgba(255, 255, 255, 0.3);
+        color: #FFFFFF;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .process-step.active .horizontal-line {
+        background-color: #141C18;
+        transform: rotate(180deg);
+    }
+
+    .process-step.active .vertical-line {
+        transform: rotate(90deg);
+        opacity: 0;
+    }
+
+    .process-step.active .toggle-btn {
+        background-color: #D1F26E;
+    }
+</style>
+
+<script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Accordion Logic
+    const triggers = document.querySelectorAll('.accordion-trigger');
+    const allSteps = document.querySelectorAll('.process-step');
+    
+    triggers.forEach((trigger) => {
+        trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            const currentTrigger = e.currentTarget as HTMLElement;
+            currentTrigger.blur();
+
+            const parent = currentTrigger.closest('.process-step');
+            const content = currentTrigger.nextElementSibling as HTMLElement;
+            
+            if (!parent || !content) return;
+
+            const isOpen = parent.classList.contains('active');
+            
+            // Close others
+            allSteps.forEach(other => {
+                const otherContent = other.querySelector('.accordion-content') as HTMLElement;
+                if (other !== parent && other.classList.contains('active')) {
+                    other.classList.remove('active');
+                    gsap.to(otherContent, {
+                        height: 0,
+                        opacity: 0,
+                        duration: 0.4,
+                        ease: "power2.inOut"
+                    });
+                }
+            });
+
+            // Toggle current
+            if (!isOpen) {
+                parent.classList.add('active');
+                gsap.to(content, {
+                    height: "auto",
+                    opacity: 1,
+                    duration: 0.5,
+                    ease: "power2.out",
+                    onUpdate: () => ScrollTrigger.refresh(),
+                    onComplete: () => {
+                        ScrollTrigger.refresh();
+                        // Refined scroll to active item to prevent jump
+                        const headerOffset = 100;
+                        const elementPosition = parent.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            } else {
+                parent.classList.remove('active');
+                gsap.to(content, {
+                    height: 0,
+                    opacity: 0,
+                    duration: 0.4,
+                    ease: "power2.inOut",
+                    onUpdate: () => ScrollTrigger.refresh(),
+                    onComplete: () => ScrollTrigger.refresh()
+                });
+            }
+        });
+    });
+
+    // Header Animation
+    gsap.from('.process-header', {
+        scrollTrigger: {
+            trigger: '#process',
+            start: 'top 85%',
+            once: true,
+        },
+        y: 40,
+        autoAlpha: 0,
+        duration: 1,
+        ease: 'expo.out'
+    });
+
+    // Steps Animation
+    if (allSteps.length > 0) {
+        allSteps.forEach((step, index) => {
+            gsap.from(step, {
+                scrollTrigger: {
+                    trigger: step,
+                    start: 'top 92%',
+                    once: true,
+                },
+                y: 30,
+                autoAlpha: 0,
+                duration: 0.8,
+                delay: index * 0.1,
+                ease: 'expo.out'
+            });
+        });
+    }
+</script>

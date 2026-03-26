@@ -1,0 +1,215 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import AppointmentCTA from '../components/AppointmentCTA.astro';
+
+const article = {
+    title: "8 Raisons de Ne Pas Manquer Votre Prochain Rendez-vous Dentaire",
+    category: "Soins Préventifs",
+    date: "12 Décembre 2025",
+    author: "Dr Zainab Chorfi",
+    image: "/blog_featured_smile_1772312008659.webp",
+    content: [
+        {
+            type: "p",
+            text: "Ne remettez plus votre visite chez le dentiste ! Voici huit raisons majeures pour lesquelles vous devriez réserver votre prochain rendez-vous dès maintenant :"
+        },
+        {
+            type: "h2",
+            text: "1. Soins Préventifs"
+        },
+        {
+            type: "p",
+            text: "Les examens réguliers permettent de repérer les problèmes avant qu'ils ne deviennent graves. Une détection précoce signifie moins de tracas et de dépenses par la suite."
+        },
+        {
+            type: "h2",
+            text: "2. Nettoyage Professionnel"
+        },
+        {
+            type: "p",
+            text: "Même si vous vous brossez les dents et passez le fil dentaire consciencieusement, la plaque et le tartre peuvent toujours s'infiltrer. Un nettoyage professionnel élimine ces accumulations et aide à prévenir les caries et les maladies des gencives."
+        },
+        {
+            type: "h2",
+            text: "3. Dépistage du Cancer de la Bouche"
+        },
+        {
+            type: "p",
+            text: "Les dentistes sont formés pour repérer les premiers signes du cancer buccal. Des visites régulières permettent de vérifier tout point suspect rapidement, augmentant ainsi vos chances de réussite du traitement."
+        },
+        {
+            type: "h2",
+            text: "4. Conseils Personnalisés"
+        },
+        {
+            type: "p",
+            text: "Votre sourire est unique ! Votre dentiste peut vous donner des conseils personnalisés pour améliorer votre hygiène bucco-dentaire en fonction de vos besoins et de votre mode de vie."
+        },
+        {
+            type: "h2",
+            text: "5. Radiographies à Jour"
+        },
+        {
+            type: "p",
+            text: "Des visites régulières incluent souvent des radiographies, qui peuvent révéler des problèmes non visibles lors d'un examen classique, tels que des problèmes de mâchoire ou des caries cachées."
+        },
+        {
+            type: "h2",
+            text: "6. Maintenez Votre Sourire"
+        },
+        {
+            type: "p",
+            text: "Si vous avez des plombages, des couronnes ou des appareils orthodontiques, des visites régulières garantissent que tout est en bon état et que votre sourire reste éclatant."
+        }
+    ]
+};
+
+const otherArticles = [
+    {
+        category: "Orthodontie",
+        title: "L'importance de l'orthodontie chez l'enfant",
+        image: "https://images.pexels.com/photos/6620358/pexels-photo-6620358.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        date: "10 Décembre 2025"
+    },
+    {
+        category: "Esthétique dentaire",
+        title: "Comment blanchir vos dents naturellement",
+        image: "https://images.pexels.com/photos/6628929/pexels-photo-6628929.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        date: "05 Décembre 2025"
+    }
+];
+---
+
+<Layout title={`${article.title} | Blog Cabinet Chorfi`}>
+    <Navbar />
+    
+    <main class="bg-white pb-20">
+        {/* Dark Hero Header */}
+        <section class="relative min-h-[60vh] flex items-center pt-32 pb-20 bg-[#141C18] overflow-hidden">
+            {/* Background Image with Overlay */}
+            <div class="absolute inset-0 z-0">
+                <img src="/blog-featured.webp" alt="Article du blog Cabinet Dentaire Chorfi" class="w-full h-full object-cover opacity-40" />
+                <div class="absolute inset-0 bg-gradient-to-t from-[#141C18] via-[#141C18]/60 to-transparent"></div>
+            </div>
+
+            <div class="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 w-full">
+                <div class="flex flex-col gap-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-oralix-brand text-oralix-dark rounded-full text-xs font-bold uppercase tracking-wider self-start">
+                        {article.category}
+                    </div>
+                    <h1 class="text-4xl lg:text-6xl font-bold font-bricolage text-white leading-[1.1] tracking-tight max-w-3xl">
+                        {article.title}
+                    </h1>
+                    <div class="flex items-center gap-4 text-white/60 text-sm font-medium border-b border-white/10 pb-6">
+                        <span>Par {article.author}</span>
+                        <span class="w-1 h-1 rounded-full bg-white/20"></span>
+                        <span>{article.date}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <article class="max-w-4xl mx-auto px-6 lg:px-8 -mt-10 relative z-20">
+            {/* Content Container */}
+            <div class="bg-white rounded-[2.5rem] p-8 lg:p-12 lg:p-16 shadow-xl">
+                <div class="flex flex-col gap-8 text-gray-600 text-lg lg:text-xl leading-relaxed font-inter max-w-3xl">
+                    {article.content.map(block => {
+                        if (block.type === "h2") return <h2 class="text-3xl font-bold font-bricolage text-[#141C18] mt-6">{block.text}</h2>;
+                        return <p>{block.text}</p>;
+                    })}
+                </div>
+            </div>
+
+            {/* Newsletter / Share */}
+            <div class="bg-[#F8F9FA] rounded-[2.5rem] p-10 lg:p-16 flex flex-col lg:flex-row justify-between items-center gap-10 mb-24">
+                <div class="space-y-3 text-center lg:text-left">
+                    <h3 class="text-3xl font-bold font-bricolage text-[#141C18]">Restez Informé</h3>
+                    <p class="text-gray-500 text-lg">Inscrivez-vous pour recevoir nos derniers conseils santé.</p>
+                </div>
+                <div class="flex flex-col lg:flex-row gap-4 w-full lg:w-auto">
+                    <input type="email" placeholder="Votre email" class="px-8 py-4 rounded-full border border-black/5 focus:ring-2 focus:ring-[#D1F26E] outline-none min-w-[300px]" />
+                    <button class="px-8 py-4 bg-[#141C18] text-white rounded-full font-bold hover:bg-black transition-colors whitespace-nowrap">S'abonner</button>
+                </div>
+            </div>
+
+            {/* Related Articles - Home Page Design */}
+            <div class="border-t border-black/5 pt-20" id="blog-section">
+                <div class="flex flex-col lg:flex-row items-center justify-between mb-12 gap-8">
+                    <div>
+                        <div class="flex items-center gap-2 text-gray-500 text-sm font-medium mb-4">
+                            <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                            Suggestions
+                        </div>
+                        <h3 class="text-4xl lg:text-[45px] lg:text-5xl font-bold font-bricolage text-[#141C18]">
+                            Articles Récents
+                        </h3>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-12">
+                    {otherArticles.map((post) => (
+                        <div class="group cursor-pointer blog-card">
+                            {/* Category & Date Label Above Image */}
+                            <div class="flex justify-between mb-3 overflow-hidden">
+                                <span class="text-[0.8rem] font-medium text-gray-400 group-hover:text-[#141C18] transform group-hover:-translate-y-px transition-all duration-300">
+                                    {post.category}
+                                </span>
+                                <span class="text-[0.8rem] text-gray-400 opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-500">
+                                    {post.date}
+                                </span>
+                            </div>
+
+                            {/* Image Container */}
+                            <div class="relative overflow-hidden rounded-[1.25rem] bg-gray-100 mb-6 aspect-[4/3]">
+                                <img 
+                                    src={post.image} 
+                                    alt={post.title} 
+                                    class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                                />
+                                <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            </div>
+
+                            {/* Title */}
+                            <h4 class="text-[1.4rem] font-bold font-bricolage text-[#141C18] leading-[1.3] group-hover:translate-x-1 group-hover:text-gray-600 transition-all duration-300">
+                                {post.title}
+                            </h4>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </article>
+
+        <section class="mt-24">
+            <AppointmentCTA />
+        </section>
+    </main>
+
+    <Footer />
+</Layout>
+
+<script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.from('.blog-card', {
+        scrollTrigger: {
+            trigger: '#blog-section .grid',
+            start: 'top 90%',
+        },
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.15,
+        ease: 'power4.out'
+    });
+</script>
+
+<style>
+    .font-bricolage {
+        font-family: 'Bricolage Grotesque', sans-serif;
+    }
+</style>
