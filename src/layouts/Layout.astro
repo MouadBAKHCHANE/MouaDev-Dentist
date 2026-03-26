@@ -22,7 +22,8 @@ const defaultOgImage = `${siteUrl}/logo.webp`;
 
 const metaDescription = description || defaultDescription;
 const metaOgImage = ogImage || defaultOgImage;
-const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
+const cleanPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const canonicalUrl = canonical || new URL(cleanPath, siteUrl).href;
 
 const localBusinessJsonLd = {
 	"@context": "https://schema.org",

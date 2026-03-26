@@ -11,6 +11,7 @@ export default defineConfig({
   site: 'https://www.cabinetdentairechorfi.com',
   output: 'server',
   adapter: vercel(),
+  trailingSlash: 'never',
 
   vite: {
     plugins: [tailwindcss()]
