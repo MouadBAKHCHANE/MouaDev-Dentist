@@ -53,3 +53,4 @@ export default defineConfig({
     }),
   ]
 });
+// Manual deploy trigger: 04/14/2026 15:57:45
