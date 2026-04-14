@@ -49,9 +49,7 @@ const googleRating = settings?.googleRating ?? 5.0;
         
         {/* Top Content Area */}
         <div class="flex-grow flex items-center mt-12 lg:mt-8">
-            <h1 class="text-4xl lg:text-[4.5rem] font-medium text-white tracking-tight leading-[1.05] hero-fade-up max-w-2xl">
-                Illuminez Votre<br/>
-                Sourire Aujourd'hui
+            <h1 class="text-4xl lg:text-[4.5rem] font-medium text-white tracking-tight leading-[1.05] hero-fade-up max-w-2xl" set:html={homePage?.heroHeadline ? homePage.heroHeadline.replace('\n', '<br/>') : "Illuminez Votre<br/>Sourire Aujourd'hui"}>
             </h1>
         </div>
 
