@@ -25,6 +25,14 @@ const metaOgImage = ogImage || defaultOgImage;
 const cleanPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const canonicalUrl = canonical || new URL(cleanPath, siteUrl).href;
 
+const websiteJsonLd = {
+	"@context": "https://schema.org",
+	"@type": "WebSite",
+	"url": siteUrl,
+	"name": "Cabinet Dentaire Chorfi",
+	"inLanguage": "fr"
+};
+
 const localBusinessJsonLd = {
 	"@context": "https://schema.org",
 	"@type": "Dentist",
@@ -38,8 +46,13 @@ const localBusinessJsonLd = {
 		"@type": "PostalAddress",
 		"streetAddress": "Avenue Moulay Youssef n 19, 1er étage",
 		"addressLocality": "Tabriquet, Salé",
+		"postalCode": "11000",
 		"addressCountry": "MA"
 	},
+	"areaServed": [
+		{ "@type": "City", "name": "Salé" },
+		{ "@type": "City", "name": "Rabat" }
+	],
 	"geo": {
 		"@type": "GeoCoordinates",
 		"latitude": 34.0378219,
@@ -83,7 +96,7 @@ const extraJsonLd = [
 	...(breadcrumbJsonLd ? [breadcrumbJsonLd] : [])
 ];
 
-const allJsonLd = [localBusinessJsonLd, ...extraJsonLd];
+const allJsonLd = [websiteJsonLd, localBusinessJsonLd, ...extraJsonLd];
 
 import '../styles/global.css';
 import FloatingContact from '../components/FloatingContact.astro';
@@ -104,8 +117,10 @@ import FloatingContact from '../components/FloatingContact.astro';
 		<meta name="theme-color" content="#141C18" />
 		<meta name="generator" content={Astro.generator} />
 		<link rel="canonical" href={canonicalUrl} />
+		<link rel="alternate" hreflang="fr-MA" href={canonicalUrl} />
+		<link rel="alternate" hreflang="x-default" href={canonicalUrl} />
 
-		{noIndex && <meta name="robots" content="noindex, nofollow" />}
+		{noIndex ? <meta name="robots" content="noindex, nofollow" /> : <meta name="robots" content="index, follow" />}
 
 		<!-- Open Graph -->
 		<meta property="og:type" content="website" />
@@ -113,6 +128,8 @@ import FloatingContact from '../components/FloatingContact.astro';
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={metaDescription} />
 		<meta property="og:image" content={metaOgImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
 		<meta property="og:locale" content="fr_MA" />
 		<meta property="og:site_name" content="Cabinet Dentaire Chorfi" />
 
@@ -124,7 +141,9 @@ import FloatingContact from '../components/FloatingContact.astro';
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600&display=swap">
+        <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'"  />
+        <noscript><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
 		<title>{title}</title>
 
 		{allJsonLd.map((ld) => (

@@ -34,6 +34,7 @@ const blogPostJsonLd = sanityArticle ? {
     "headline": article.title,
     "image": article.image,
     "datePublished": sanityArticle.date || undefined,
+    "dateModified": sanityArticle._updatedAt || sanityArticle.date || undefined,
     "author": {
         "@type": "Person",
         "name": article.author
@@ -65,7 +66,7 @@ const blogPostJsonLd = sanityArticle ? {
         {/* Dark Hero Header */}
         <section class="relative min-h-[60vh] flex items-center pt-32 pb-20 bg-[#141C18] overflow-hidden">
             <div class="absolute inset-0 z-0">
-                <img src={article.image} alt={article.title} class="w-full h-full object-cover opacity-40" />
+                <img src={article.image} alt={article.title} width="1200" height="675" loading="eager" class="w-full h-full object-cover opacity-40" />
                 <div class="absolute inset-0 bg-gradient-to-t from-[#141C18] via-[#141C18]/60 to-transparent"></div>
             </div>
 

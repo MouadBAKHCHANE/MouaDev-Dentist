@@ -29,9 +29,13 @@ const googleRating = settings?.googleRating ?? 5.0;
                 class={`hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === 0 ? 'opacity-100' : 'opacity-0'}`}
                 data-index={index}
             >
-                <img 
-                    src={slide.image} 
-                    alt={slide.alt} 
+                <img
+                    src={slide.image}
+                    alt={slide.alt}
+                    width="1920"
+                    height="1080"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    fetchpriority={index === 0 ? "high" : "low"}
                     class="w-full h-full object-cover object-[center_35%] lg:object-center transition-transform duration-[3000ms] group-hover/hero:scale-105"
                 />
             </div>
@@ -99,13 +103,13 @@ const googleRating = settings?.googleRating ?? 5.0;
 
         {/* Desktop Social sidebar (Moved up) */}
         <div class="absolute right-6 lg:right-8 top-[32%] -translate-y-1/2 z-20 flex-col items-center gap-6 hidden lg:flex py-8">
-            <a href="https://www.instagram.com/cabinet.dentaire.chorfi/" target="_blank" rel="noopener noreferrer" class="hero-social-link text-white hover:text-oralix-brand hover:scale-110 hover:-translate-x-1 transition-all duration-300">
+            <a href="https://www.instagram.com/cabinet.dentaire.chorfi/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="hero-social-link text-white hover:text-oralix-brand hover:scale-110 hover:-translate-x-1 transition-all duration-300">
                 <svg class="w-6 h-6 fill-current drop-shadow-md" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
             </a>
-            <a href="https://www.facebook.com/61576404963248/about/" target="_blank" rel="noopener noreferrer" class="hero-social-link text-white hover:text-oralix-brand hover:scale-110 hover:-translate-x-1 transition-all duration-300">
+            <a href="https://www.facebook.com/61576404963248/about/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="hero-social-link text-white hover:text-oralix-brand hover:scale-110 hover:-translate-x-1 transition-all duration-300">
                 <svg class="w-6 h-6 fill-current drop-shadow-md" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
             </a>
-            <a href="https://wa.me/212644801152" target="_blank" rel="noopener noreferrer" class="hero-social-link text-white hover:text-oralix-brand hover:scale-110 hover:-translate-x-1 transition-all duration-300">
+            <a href="https://wa.me/212644801152" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="hero-social-link text-white hover:text-oralix-brand hover:scale-110 hover:-translate-x-1 transition-all duration-300">
                 <svg class="w-6 h-6 fill-current drop-shadow-md" viewBox="0 0 24 24"><path d="M12.01 2.002c-5.523 0-10.002 4.478-10.002 10.002 0 1.966.568 3.805 1.55 5.334L2.001 22l4.825-1.503c1.474.887 3.232 1.401 5.084 1.401 5.522 0 10.001-4.478 10.001-10.002S17.532 2.002 12.01 2.002zm0 18.003c-1.571 0-3.05-.403-4.341-1.116l-.312-.186-3.14.978.995-3.03-.205-.327a8.552 8.552 0 0 1-1.353-4.536c0-4.664 3.79-8.455 8.455-8.455 4.665 0 8.455 3.791 8.455 8.455 0 4.663-3.79 8.454-8.455 8.454zm4.453-6.262c-.244-.122-1.442-.713-1.666-.795-.224-.082-.387-.122-.55.122-.163.245-.631.795-.774.958-.142.163-.285.184-.53.061-.244-.122-1.028-.379-1.956-1.206-.723-.644-1.21-1.44-1.353-1.684-.143-.245-.015-.377.107-.499.11-.11.245-.285.366-.428.123-.143.163-.245.245-.408.082-.163.041-.306-.02-.428-.061-.122-.55-1.326-.754-1.816-.199-.479-.402-.414-.55-.421-.143-.007-.306-.008-.469-.008s-.428.061-.652.306c-.224.245-.856.836-.856 2.039 0 1.203.876 2.366.998 2.529.123.163 1.724 2.632 4.175 3.692.583.253 1.038.404 1.393.516.586.186 1.12.16 1.543.097.472-.07 1.442-.59 1.646-1.161.204-.571.204-1.06.143-1.161-.061-.102-.224-.163-.469-.286z"/></svg>
             </a>
             <a href="https://dentisto.ma/rendez-vous/docteurs/chorfi-zainab-2520" target="_blank" rel="noopener noreferrer" class="hero-social-link text-white hover:text-oralix-brand hover:scale-110 hover:-translate-x-1 transition-all duration-300" aria-label="Appointment">
