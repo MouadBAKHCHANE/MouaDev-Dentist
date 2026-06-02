@@ -1,0 +1,26 @@
+{
+  "mutations": [
+    {
+      "patch": {
+        "id": "servicesPage",
+        "set": {
+          "seo": {
+            "metaTitle": "Nos Soins Dentaires à Salé | Cabinet Dentaire Chorfi",
+            "metaDescription": "Découvrez nos soins dentaires à Salé Tabriquet : blanchiment, implants, facettes et orthodontie. Une équipe d'experts à votre écoute."
+          }
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "contactPage",
+        "set": {
+          "seo": {
+            "metaTitle": "Contactez Dr Zainab Chorfi | Dentiste à Salé Tabriquet",
+            "metaDescription": "Prenez rendez-vous au Cabinet Dentaire Chorfi à Salé Tabriquet. Contactez-nous par téléphone ou WhatsApp pour une consultation rapide."
+          }
+        }
+      }
+    }
+  ]
+}

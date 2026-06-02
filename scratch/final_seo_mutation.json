@@ -1,0 +1,48 @@
+{
+  "mutations": [
+    {
+      "patch": {
+        "id": "siteSettings",
+        "set": {
+          "seo": {
+            "metaTitle": "Cabinet Dentaire Chorfi | Votre Dentiste à Salé Tabriquet",
+            "metaDescription": "Le Cabinet Dentaire Chorfi à Salé Tabriquet vous propose des soins dentaires modernes, une écoute attentive et des technologies de pointe pour votre sourire."
+          }
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "blog-ecoute-meilleur-outil",
+        "set": {
+          "seo": {
+            "metaTitle": "L'écoute au cœur du soin dentaire | Dr Zainab Chorfi",
+            "metaDescription": "Pourquoi l'écoute patient est-elle essentielle ? Découvrez l'approche humaine du Cabinet Dentaire Chorfi à Salé pour des soins sans stress."
+          }
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "blog-facettes-et-couronnes",
+        "set": {
+          "seo": {
+            "metaTitle": "Facettes et Couronnes Dentaires à Salé | Cabinet Chorfi",
+            "metaDescription": "Sublimez votre sourire avec les facettes et couronnes dentaires. Découvrez nos solutions esthétiques modernes au Cabinet Dentaire Chorfi."
+          }
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "blog-trio-gagnant-sourire",
+        "set": {
+          "seo": {
+            "metaTitle": "3 Conseils pour un Sourire Éclatant | Cabinet Dentaire Salé",
+            "metaDescription": "Découvrez le trio gagnant pour une hygiène dentaire parfaite. Les conseils d'experts du Dr Zainab Chorfi pour vos dents à Salé."
+          }
+        }
+      }
+    }
+  ]
+}

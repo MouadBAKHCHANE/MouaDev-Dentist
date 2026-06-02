@@ -41,7 +41,7 @@ async function main() {
     footerNavTitle: 'Navigation',
     footerHoraireTitle: 'Horaires',
     footerContactTitle: 'Contact',
-    footerCopyright: '© 2026 Cabinet Dentaire Chorfi | Tous droits réservés. Conçu par <a href="https://wa.me/212611714711" target="_blank" rel="noopener noreferrer" class="text-white font-medium hover:text-oralix-brand transition-colors">MouaDev</a>.',
+    footerCopyright: '© 2026 Cabinet Dentaire Chorfi | Tous droits réservés. Conçu par <a href="https://wa.me/212611714711" target="_blank" rel="noopener noreferrer" class="text-white font-medium hover:text-oralix-brand transition-colors">MouaDev</a> - <a href="https://www.instagram.com/hosniayoub_?utm_source=qr" target="_blank" rel="noopener noreferrer" class="text-white font-medium hover:text-oralix-brand transition-colors">Ayoub HOSNI</a>.',
     formLabelName: 'Nom Complet',
     formLabelPhone: 'Téléphone',
     formLabelEmail: 'E-mail',
