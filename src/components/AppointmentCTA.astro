@@ -40,13 +40,19 @@ const ctaHeadline = homePage?.ctaHeadline ?? "Obtenez le sourire que vous mérit
         </h2>
         
         <div class="flex justify-center">
-            <a href={homePage?.ctaCTALink ?? "/contact"} class="bg-[#d9f96b] text-[#141C18] px-10 py-5 rounded-full font-medium text-lg flex items-center gap-3 hover:bg-[#cbef5a] transition-all group scale-110">
-                {homePage?.ctaCTAText ?? "Prendre Rendez-vous"}
-                <div class="bg-black text-white w-8 h-8 rounded-full flex items-center justify-center transition-transform group-hover:rotate-45">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <a href={homePage?.ctaCTALink ?? "/contact"} class="flex items-center gap-2 group w-fit">
+                <span class="bg-[#cbfb45] text-[#141C18] font-medium rounded-full text-sm block overflow-hidden h-12 relative transition-colors group-hover:bg-[#bdf333]">
+                    <span class="invisible flex items-center justify-center h-12 px-6 whitespace-nowrap">{homePage?.ctaCTAText ?? "Prendre Rendez-vous"}</span>
+                    <span class="absolute inset-0 flex flex-col h-[200%] w-full transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)] group-hover:-translate-y-1/2">
+                        <span class="flex items-center justify-center h-12 w-full whitespace-nowrap">{homePage?.ctaCTAText ?? "Prendre Rendez-vous"}</span>
+                        <span class="flex items-center justify-center h-12 w-full whitespace-nowrap">{homePage?.ctaCTAText ?? "Prendre Rendez-vous"}</span>
+                    </span>
+                </span>
+                <span class="bg-[#cbfb45] text-[#141C18] w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-[#bdf333] transition-colors">
+                    <svg class="w-5 h-5 transition-transform duration-500 ease-out group-hover:rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19L19 5M19 5v10M19 5H9" />
                     </svg>
-                </div>
+                </span>
             </a>
         </div>
     </div>

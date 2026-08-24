@@ -4,11 +4,17 @@ import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
 import AppointmentCTA from '../../components/AppointmentCTA.astro';
 import { urlFor } from '../../lib/sanity';
-import { getBlogPostBySlug } from '../../lib/queries';
+import { getBlogPostBySlug, getAllBlogPosts } from '../../lib/queries';
 
 const { id } = Astro.params;
 
 const sanityArticle = await getBlogPostBySlug(id!);
+
+// Unknown slug: respond with a real 404 status so search engines
+// don't treat this route as an infinite space of soft-404 pages.
+if (!sanityArticle) {
+    Astro.response.status = 404;
+}
 
 const article = sanityArticle ? {
     title: sanityArticle.title,
@@ -27,6 +33,17 @@ const article = sanityArticle ? {
 };
 
 const seo = sanityArticle?.seo;
+
+const allPosts = sanityArticle ? await getAllBlogPosts() : [];
+const relatedPosts = (allPosts ?? [])
+    .filter((p: any) => p.slug !== id)
+    .slice(0, 3)
+    .map((p: any) => ({
+        title: p.title,
+        category: p.category,
+        slug: p.slug,
+        image: p.coverImage ? urlFor(p.coverImage).width(600).format('webp').url() : '/images/blog/veneers.png'
+    }));
 
 const blogPostJsonLd = sanityArticle ? {
     "@context": "https://schema.org",
@@ -56,7 +73,7 @@ const blogPostJsonLd = sanityArticle ? {
     title={seo?.metaTitle ?? `${article.title} | Blog Cabinet Chorfi`}
     description={seo?.metaDescription ?? sanityArticle?.excerpt}
     ogImage={seo?.ogImage ? urlFor(seo.ogImage).width(1200).height(630).format('webp').url() : article.image}
-    noIndex={seo?.noIndex}
+    noIndex={sanityArticle ? seo?.noIndex : true}
     jsonLd={blogPostJsonLd}
     breadcrumbs={[{ name: "Blog", href: "/blog" }, { name: article.title, href: `/blog/${id}` }]}
 >
@@ -97,7 +114,24 @@ const blogPostJsonLd = sanityArticle ? {
                 </div>
             </div>
 
-            <div class="mt-20 border-t border-black/5 pt-20">
+            {relatedPosts.length > 0 && (
+            <div class="mt-20 border-t border-black/5 pt-16">
+                <h2 class="text-2xl lg:text-3xl font-bold font-bricolage text-[#141C18] mb-8">À lire aussi</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                    {relatedPosts.map((post: any) => (
+                        <a href={`/blog/${post.slug}`} class="group block">
+                            <div class="relative overflow-hidden rounded-2xl bg-gray-100 mb-4 aspect-[4/3]">
+                                <img src={post.image} alt={post.title} width="600" height="450" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                            </div>
+                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">{post.category}</span>
+                            <h3 class="text-lg font-bold font-bricolage text-[#141C18] leading-snug mt-1 group-hover:text-gray-600 transition-colors">{post.title}</h3>
+                        </a>
+                    ))}
+                </div>
+            </div>
+            )}
+
+            <div class="mt-16 border-t border-black/5 pt-16">
                 <a href="/blog" class="inline-flex items-center gap-2 text-[#141C18] font-bold hover:translate-x-[-8px] transition-transform">
                     <svg class="w-5 h-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>

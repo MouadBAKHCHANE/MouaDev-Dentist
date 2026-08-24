@@ -38,23 +38,23 @@ const posts = sanityPosts?.length ? sanityPosts.slice(0, 3).map((p: any) => ({
             
             {/* Split Button - Desktop Only (in Header) */}
             {homePage?.blogButtonText && (
-            <div class="hidden lg:flex items-center gap-2 group cursor-pointer w-fit" onclick="window.location.href='/blog'">
-                <div class="bg-[#d9f96b] text-[#141C18] font-medium rounded-full text-sm flex items-center justify-center px-8 h-12 transition-colors group-hover:bg-[#cbef5a]">
+            <a href="/blog" class="hidden lg:flex items-center gap-2 group cursor-pointer w-fit">
+                <span class="bg-[#d9f96b] text-[#141C18] font-medium rounded-full text-sm flex items-center justify-center px-8 h-12 transition-colors group-hover:bg-[#cbef5a]">
                     {homePage?.blogButtonText ?? "Lire plus d'articles"}
-                </div>
-                <div class="bg-[#d9f96b] text-[#141C18] w-12 h-12 rounded-full flex items-center justify-center group-hover:bg-[#cbef5a] transition-colors overflow-hidden">
+                </span>
+                <span class="bg-[#d9f96b] text-[#141C18] w-12 h-12 rounded-full flex items-center justify-center group-hover:bg-[#cbef5a] transition-colors overflow-hidden">
                     <svg class="w-5 h-5 transition-transform duration-500 ease-out group-hover:rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19L19 5M19 5v10M19 5H9" />
                     </svg>
-                </div>
-            </div>
+                </span>
+            </a>
             )}
         </div>
 
         {/* Blog Grid */}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-10 items-start">
             {posts.map((post) => (
-                <div class="group cursor-pointer blog-card" onclick={`window.location.href='/blog/${post.slug}'`}>
+                <a href={`/blog/${post.slug}`} class="group cursor-pointer blog-card block">
                     {/* Category & Date Label Above Image */}
                     <div class="flex justify-between mb-2 overflow-hidden">
                         <span class="text-[0.75rem] font-medium text-gray-400 group-hover:text-[#141C18] transform group-hover:-translate-y-px transition-all duration-300">
@@ -80,23 +80,23 @@ const posts = sanityPosts?.length ? sanityPosts.slice(0, 3).map((p: any) => ({
                     <h3 class="text-[1.2rem] font-medium font-bricolage text-[#141C18] leading-[1.3] group-hover:translate-x-1 group-hover:text-gray-600 transition-all duration-300">
                         {post.title}
                     </h3>
-                </div>
+                </a>
             ))}
         </div>
         
         {/* Mobile-only CTA below grid */}
         {homePage?.blogButtonText && (
         <div class="mt-16 flex justify-center lg:hidden blog-cta-mobile">
-            <div class="flex items-center gap-2 group cursor-pointer w-fit" onclick="window.location.href='/blog'">
-                <div class="bg-[#d9f96b] text-[#141C18] font-medium rounded-full text-sm flex items-center justify-center px-8 h-12 transition-colors active:bg-[#cbef5a]">
+            <a href="/blog" class="flex items-center gap-2 group cursor-pointer w-fit">
+                <span class="bg-[#d9f96b] text-[#141C18] font-medium rounded-full text-sm flex items-center justify-center px-8 h-12 transition-colors active:bg-[#cbef5a]">
                     {homePage?.blogButtonText ?? "Lire plus d'articles"}
-                </div>
-                <div class="bg-[#d9f96b] text-[#141C18] w-12 h-12 rounded-full flex items-center justify-center active:bg-[#cbef5a] transition-colors">
+                </span>
+                <span class="bg-[#d9f96b] text-[#141C18] w-12 h-12 rounded-full flex items-center justify-center active:bg-[#cbef5a] transition-colors">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19L19 5M19 5v10M19 5H9" />
                     </svg>
-                </div>
-            </div>
+                </span>
+            </a>
         </div>
         )}
     </div>

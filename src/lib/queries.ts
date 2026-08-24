@@ -12,7 +12,7 @@ export async function getSiteSettings() {
       ctaButtonText, ctaButtonLink, locationButtonText, googleMapsButtonText,
       socialLinks[]{ platform, url },
       businessHours[]{ days, hours, isClosed },
-      googleRating, googleReviewCount,
+      googleRating, googleReviewCount, googleMapsUrl,
       appointmentUrl, whatsappNumber,
       footerAboutTitle, footerNavTitle, footerHoraireTitle, footerContactTitle, footerCopyright,
       formLabelName, formLabelPhone, formLabelEmail, formLabelService, formLabelDate,

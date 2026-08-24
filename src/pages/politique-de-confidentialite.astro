@@ -6,6 +6,10 @@ import PageHeader from '../components/PageHeader.astro';
 import { getLegalPage } from '../lib/queries';
 
 const page = await getLegalPage('politique-de-confidentialite');
+
+const contentBlocks = (page?.content ?? []).filter((block: any) =>
+    !page?.lastUpdated || !block.text?.trim().toLowerCase().startsWith('dernière mise à jour')
+);
 ---
 
 <Layout
@@ -24,8 +28,8 @@ const page = await getLegalPage('politique-de-confidentialite');
             <div class="max-w-4xl mx-auto px-6 lg:px-8">
                 <div class="prose prose-lg prose-headings:font-bricolage prose-headings:text-oralix-dark prose-p:text-gray-500 prose-li:text-gray-500">
                     {page?.lastUpdated && <p class="mb-8">Dernière mise à jour : {page.lastUpdated}</p>}
-                    {page?.content?.length ? (
-                        page.content.map((block: any) => {
+                    {contentBlocks.length ? (
+                        contentBlocks.map((block: any) => {
                             if (block.type === 'h2') return <h2 class="text-3xl font-bold mt-12 mb-6">{block.text}</h2>;
                             if (block.type === 'ul') return <ul class="list-disc pl-6 mb-8"><li>{block.text}</li></ul>;
                             return <p>{block.text}</p>;

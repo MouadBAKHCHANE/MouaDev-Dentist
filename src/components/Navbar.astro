@@ -58,11 +58,19 @@ const dentistoUrl = socialLinks.find((s: any) => s.platform === 'dentisto')?.url
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                 </a>
-                <a href="/contact" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 border border-transparent text-sm font-semibold rounded-full text-oralix-dark bg-oralix-brand hover:scale-105 transition-transform group whitespace-nowrap">
-                    {settings?.ctaButtonText ?? "Prendre Rendez-vous"}
-                    <svg class="w-3.5 h-3.5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
+                <a href="/contact" class="flex items-center gap-2 group w-fit">
+                    <span class="bg-[#cbfb45] text-[#141C18] font-medium rounded-full text-sm block overflow-hidden h-12 relative transition-colors group-hover:bg-[#bdf333]">
+                        <span class="invisible flex items-center justify-center h-12 px-6 whitespace-nowrap">{settings?.ctaButtonText ?? "Prendre Rendez-vous"}</span>
+                        <span class="absolute inset-0 flex flex-col h-[200%] w-full transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)] group-hover:-translate-y-1/2">
+                            <span class="flex items-center justify-center h-12 w-full whitespace-nowrap">{settings?.ctaButtonText ?? "Prendre Rendez-vous"}</span>
+                            <span class="flex items-center justify-center h-12 w-full whitespace-nowrap">{settings?.ctaButtonText ?? "Prendre Rendez-vous"}</span>
+                        </span>
+                    </span>
+                    <span class="bg-[#cbfb45] text-[#141C18] w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-[#bdf333] transition-colors">
+                        <svg class="w-5 h-5 transition-transform duration-500 ease-out group-hover:rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19L19 5M19 5v10M19 5H9" />
+                        </svg>
+                    </span>
                 </a>
             </div>
 
@@ -96,11 +104,19 @@ const dentistoUrl = socialLinks.find((s: any) => s.platform === 'dentisto')?.url
 
         <div class="mt-auto pb-12 flex flex-col items-center space-y-10 mobile-menu-item opacity-0">
             <div class="flex flex-col items-center gap-4 w-full px-6">
-                <a href="/contact" class="w-full max-w-xs inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold rounded-full text-oralix-dark bg-oralix-brand hover:scale-105 transition-transform shadow-xl">
-                    {settings?.ctaButtonText ?? "Prendre Rendez-vous"}
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
+                <a href="/contact" class="flex items-center justify-center gap-2 group w-fit mx-auto">
+                    <span class="bg-[#cbfb45] text-[#141C18] font-medium rounded-full text-sm block overflow-hidden h-12 relative transition-colors group-hover:bg-[#bdf333]">
+                        <span class="invisible flex items-center justify-center h-12 px-6 whitespace-nowrap">{settings?.ctaButtonText ?? "Prendre Rendez-vous"}</span>
+                        <span class="absolute inset-0 flex flex-col h-[200%] w-full transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)] group-hover:-translate-y-1/2">
+                            <span class="flex items-center justify-center h-12 w-full whitespace-nowrap">{settings?.ctaButtonText ?? "Prendre Rendez-vous"}</span>
+                            <span class="flex items-center justify-center h-12 w-full whitespace-nowrap">{settings?.ctaButtonText ?? "Prendre Rendez-vous"}</span>
+                        </span>
+                    </span>
+                    <span class="bg-[#cbfb45] text-[#141C18] w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-[#bdf333] transition-colors">
+                        <svg class="w-5 h-5 transition-transform duration-500 ease-out group-hover:rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19L19 5M19 5v10M19 5H9" />
+                        </svg>
+                    </span>
                 </a>
                 <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" class="w-full max-w-xs inline-flex items-center justify-center gap-2 px-8 py-3 text-base font-semibold rounded-full text-white border border-white/20 hover:bg-white/10 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-oralix-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor">

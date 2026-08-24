@@ -24,6 +24,10 @@ const posts = sanityPosts?.length ? sanityPosts.map((p: any) => ({
   { category: "Hygiène et prévention", title: "Le trio gagnant pour un sourire éclatant", image: "/images/blog/trio-sourire.png", date: "05 Mars 2026", desc: "Détartrage, aéropolissage et blanchiment.", slug: "trio-gagnant-sourire", tall: false }
 ];
 
+const rawCategories = (blogPage?.filterCategories?.length ? blogPage.filterCategories : [])
+    .filter((cat: string) => cat !== 'Soin de Canal' && cat !== 'Prévention' && cat !== 'Tous');
+const filterCategories = rawCategories.length ? ['Tous', ...rawCategories] : [];
+
 const collectionPageJsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -64,11 +68,11 @@ const collectionPageJsonLd = {
         <section class="py-24 bg-white" id="blog-section">
             <div class="max-w-7xl mx-auto px-6 lg:px-8">
                 {/* Categories Filter */}
-                {((blogPage?.filterCategories?.length ? blogPage.filterCategories : []).filter(cat => cat !== 'Soin de Canal' && cat !== 'Prévention')).length > 0 && (
+                {filterCategories.length > 0 && (
                 <div class="flex flex-wrap gap-4 mb-20 justify-center filter-container">
-                    {((blogPage?.filterCategories?.length ? blogPage.filterCategories : []).filter(cat => cat !== 'Soin de Canal' && cat !== 'Prévention')).map(cat => (
+                    {filterCategories.map(cat => (
                         <button
-                            class={`filter-btn px-6 py-2.5 rounded-full border border-black/5 transition-all duration-300 font-medium text-sm text-oralix-dark hover:bg-oralix-brand hover:border-oralix-brand`}
+                            class={`filter-btn px-6 py-2.5 rounded-full border border-black/5 transition-all duration-300 font-medium text-sm text-oralix-dark ${cat === 'Tous' ? 'bg-oralix-brand border-oralix-brand' : 'hover:bg-oralix-brand hover:border-oralix-brand'}`}
                             data-category={cat}
                         >
                             {cat}
@@ -80,7 +84,7 @@ const collectionPageJsonLd = {
                 {/* Blog Grid - Home Page Design */}
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-12 gap-y-20 items-start blog-grid">
                     {posts.map((post) => (
-                        <div class="group cursor-pointer blog-item flex flex-col" data-category={post.category} onclick={`window.location.href='/blog/${post.slug}'`}>
+                        <a href={`/blog/${post.slug}`} class="group cursor-pointer blog-item flex flex-col" data-category={post.category}>
                             {/* Category & Date Label Above Image */}
                             <div class="flex justify-between mb-3 overflow-hidden">
                                 <span class="text-[0.85rem] font-bold text-gray-400 group-hover:text-[#141C18] transform group-hover:-translate-y-px transition-all duration-300 uppercase tracking-wider">
@@ -122,7 +126,7 @@ const collectionPageJsonLd = {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     ))}
                 </div>
             </div>

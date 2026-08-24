@@ -3,11 +3,12 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import PageHeader from '../components/PageHeader.astro';
-import { getSitemapLinks } from '../lib/queries';
+import { getSitemapLinks, getAllBlogPosts } from '../lib/queries';
 
 const sanityLinks = await getSitemapLinks();
+const blogPosts = await getAllBlogPosts();
 
-const links = sanityLinks?.length ? sanityLinks : [
+const defaultLinks = [
     {
         category: "Pages Principales",
         items: [
@@ -35,6 +36,14 @@ const links = sanityLinks?.length ? sanityLinks : [
         ]
     }
 ];
+
+const hasArticleLinks = (sanityLinks ?? []).some((g: any) => g.items?.some((i: any) => i.href?.startsWith('/blog/')));
+const blogGroup = blogPosts?.length && !hasArticleLinks ? [{
+    category: "Articles",
+    items: blogPosts.map((p: any) => ({ name: p.title, href: `/blog/${p.slug}` }))
+}] : [];
+
+const links = [...(sanityLinks?.length ? sanityLinks : defaultLinks), ...blogGroup];
 ---
 
 <Layout
