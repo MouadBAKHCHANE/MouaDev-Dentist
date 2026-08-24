@@ -5,6 +5,7 @@ import Footer from '../../components/Footer.astro';
 import AppointmentCTA from '../../components/AppointmentCTA.astro';
 import { urlFor } from '../../lib/sanity';
 import { getBlogPostBySlug, getAllBlogPosts } from '../../lib/queries';
+import { toIsoDate, toFrenchDate } from '../../lib/dates';
 
 const { id } = Astro.params;
 
@@ -19,7 +20,7 @@ if (!sanityArticle) {
 const article = sanityArticle ? {
     title: sanityArticle.title,
     category: sanityArticle.category,
-    date: sanityArticle.date ? new Date(sanityArticle.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '',
+    date: toFrenchDate(sanityArticle.date),
     author: sanityArticle.author ?? 'Dr Zainab Chorfi',
     image: sanityArticle.coverImage ? urlFor(sanityArticle.coverImage).width(1200).format('webp').url() : '/images/blog/veneers.png',
     content: sanityArticle.content ?? []
@@ -50,8 +51,8 @@ const blogPostJsonLd = sanityArticle ? {
     "@type": "BlogPosting",
     "headline": article.title,
     "image": article.image,
-    "datePublished": sanityArticle.date || undefined,
-    "dateModified": sanityArticle._updatedAt || sanityArticle.date || undefined,
+    "datePublished": toIsoDate(sanityArticle.date),
+    "dateModified": sanityArticle._updatedAt || toIsoDate(sanityArticle.date),
     "author": {
         "@type": "Person",
         "name": article.author

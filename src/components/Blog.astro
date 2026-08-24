@@ -1,6 +1,7 @@
 ---
 import { urlFor } from '../lib/sanity';
 import { getAllBlogPosts, getHomePage } from '../lib/queries';
+import { toFrenchDate } from '../lib/dates';
 
 const sanityPosts = await getAllBlogPosts();
 const homePage = await getHomePage();
@@ -9,7 +10,7 @@ const posts = sanityPosts?.length ? sanityPosts.slice(0, 3).map((p: any) => ({
     category: p.category,
     title: p.title,
     image: p.coverImage ? urlFor(p.coverImage).width(800).format('webp').url() : '/images/blog/veneers.png',
-    date: p.date ? new Date(p.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '',
+    date: toFrenchDate(p.date),
     slug: p.slug,
     tall: p.isTall ?? false
 })) : [

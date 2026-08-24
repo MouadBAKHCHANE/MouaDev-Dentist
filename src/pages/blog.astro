@@ -6,6 +6,7 @@ import PageHeader from '../components/PageHeader.astro';
 import AppointmentCTA from '../components/AppointmentCTA.astro';
 import { urlFor } from '../lib/sanity';
 import { getAllBlogPosts, getBlogPage } from '../lib/queries';
+import { toFrenchDate } from '../lib/dates';
 
 const blogPage = await getBlogPage();
 const sanityPosts = await getAllBlogPosts();
@@ -14,7 +15,7 @@ const posts = sanityPosts?.length ? sanityPosts.map((p: any) => ({
     category: p.category,
     title: p.title,
     image: p.coverImage ? urlFor(p.coverImage).width(800).format('webp').url() : '/images/blog/veneers.png',
-    date: p.date ? new Date(p.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '',
+    date: toFrenchDate(p.date),
     desc: p.excerpt ?? '',
     slug: p.slug,
     tall: p.isTall ?? false
@@ -34,11 +35,7 @@ const collectionPageJsonLd = {
     "name": "Nos Articles | Cabinet Dentaire Chorfi",
     "description": "Conseils dentaires, actualités du cabinet et articles sur l'hygiène bucco-dentaire par Dr Zainab Chorfi.",
     "url": "https://www.cabinetdentairechorfi.com/blog",
-    "isPartOf": {
-        "@type": "WebSite",
-        "name": "Cabinet Dentaire Chorfi",
-        "url": "https://www.cabinetdentairechorfi.com"
-    },
+    "isPartOf": { "@id": "https://www.cabinetdentairechorfi.com/#website" },
     "mainEntity": {
         "@type": "ItemList",
         "itemListElement": posts.map((p: any, i: number) => ({

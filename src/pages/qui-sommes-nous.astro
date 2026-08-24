@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import ContactSection from '../components/ContactSection.astro';
 import { urlFor } from '../lib/sanity';
 import { getTeamMembers, getClinicFeatures, getAboutPage, getSiteSettings } from '../lib/queries';
+import { DOCTOR_ID, DENTIST_ID } from '../lib/schema';
 
 const aboutPage = await getAboutPage();
 const settings = await getSiteSettings();
@@ -26,15 +27,12 @@ const trainings = doctor?.trainings ?? [
 const personJsonLd = {
     "@context": "https://schema.org",
     "@type": ["Person", "Dentist"],
+    "@id": DOCTOR_ID,
     "name": aboutPage?.doctorName ?? doctor?.name ?? "Dr Zainab Chorfi",
     "jobTitle": aboutPage?.doctorTitle ?? doctor?.title ?? "Chirurgien-dentiste",
     "url": "https://www.cabinetdentairechorfi.com/qui-sommes-nous",
     "telephone": ["+212644801152", "+212538716787"],
-    "worksFor": {
-        "@type": "Dentist",
-        "name": "Cabinet Dentaire Chorfi",
-        "url": "https://www.cabinetdentairechorfi.com"
-    },
+    "worksFor": { "@id": DENTIST_ID },
     "address": {
         "@type": "PostalAddress",
         "streetAddress": "Avenue Moulay Youssef n 19, 1er étage",
